@@ -1,0 +1,5995 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: support@signiflow.com
+    name: SigniFlow Support
+    url: https://www.signiflow.com/contact
+  description: |
+    ## SigniFlow API used to automate esignature workflow creation and management.
+  license:
+    name: Proprietary
+    url: https://www.signiflow.com/legal
+  termsOfService: https://www.signiflow.com/legal
+  title: SigniFlow OpenAPI Spec v1
+  version: "1.0"
+servers:
+- description: SigniFlow Instance url
+  url: https://{serverUrl}/API/SignFlowAPIServiceRest.svc
+  variables:
+    serverUrl:
+      default: clientname.signiflow.com
+- description: Pre-Production
+  url: https://preprod.signiflow.com/API/SignFlowAPIServiceRest.svc
+- description: Australia Cloud
+  url: https://au.signiflow.com/API/SignFlowAPIServiceRest.svc
+- description: Europe Cloud
+  url: https://eu.signiflow.com/API/SignFlowAPIServiceRest.svc
+- description: South Africa Cloud
+  url: https://flow.signflow.co.za/API/SignFlowAPIServiceRest.svc
+- description: South America Cloud
+  url: https://latam.signiflow.com/API/SignFlowAPIServiceRest.svc
+- description: United Kingdom Cloud
+  url: https://uk.signiflow.com/API/SignFlowAPIServiceRest.svc
+- description: United States Cloud
+  url: https://us.signiflow.com/API/SignFlowAPIServiceRest.svc
+tags:
+- description: Methods used to get an API Token
+  externalDocs: {}
+  name: Authentication
+- description: Methods used to send documents through a Workflow
+  externalDocs: {}
+  name: WorkFlow
+- description: Methods used to create, apply and manage templates
+  externalDocs: {}
+  name: Templates
+- description: Methods used to manage portfolios
+  externalDocs: {}
+  name: Portfolios
+- description: Methods used to manage audits
+  externalDocs: {}
+  name: Audits
+- description: Methods used to return view url
+  externalDocs: {}
+  name: Viewers
+- description: Methods used to return view url
+  externalDocs: {}
+  name: Signing Ceremony
+- description: Enumerations used by the Models
+  externalDocs: {}
+  name: Enumerations
+- description: Requet and Response Models used by the API
+  externalDocs: {}
+  name: Models
+paths:
+  /Login:
+    post:
+      deprecated: false
+      description: '#### Generates a API Token for the User'
+      operationId: Login
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            example:
+              UserNameField: email@domain.com
+              PasswordField: P@ssword
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        description: '##### Login Request Model'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: success
+                    TokenField:
+                      TokenExpiryField: 2019-08-24T14:15:22Z
+                      TokenField: aaa111
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: '##### Login Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Login
+      tags:
+      - Authentication
+      x-contentType: application/json
+      x-accepts: application/json
+  /Logout:
+    post:
+      description: '#### Used to log out a user from SigniFlow.'
+      operationId: post-Logout
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        description: '##### Logout Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: success
+                    TokenField:
+                      TokenExpiryField: 2019-08-24T14:15:22Z
+                      TokenField: aaa111
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+          description: '##### Logout Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Logout
+      tags:
+      - Authentication
+      x-contentType: application/json
+      x-accepts: application/json
+  /CreateWorkflow:
+    post:
+      deprecated: false
+      description: '#### Used to start a new workflow by passing a Base64 encoded
+        document to SigniFlow'
+      operationId: CreateWorkflow
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  AdditionalDataField: '""'
+                  AutoExpireField: 0
+                  AutoRemindField: 0
+                  DocField: String content
+                  DocNameField: String content
+                  DueDateField: 2019-08-24T14:15:22Z
+                  ExtensionField: 0
+                  MessageField: String content
+                  PriorityField: 0
+                  SLAField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/CreateWorkflowRequest'
+        description: '##### Create Workflow Request Model'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocIDField: 2147483647
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/CreateWorkflowResponse'
+          description: '##### Create Workflow Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Create Workflow
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetDoc:
+    post:
+      description: '#### Used to download a document from SigniFlow.'
+      operationId: GetDocument
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: 2147483647
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetDocumentRequest'
+        description: '##### Get Document Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocField: string
+                    DocNameField: template
+                    ExtensionField: pdf
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/GetDocumentResponse'
+          description: '##### Get Document Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Document
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /AddWorkflowStepV2:
+    post:
+      description: '#### Used to add a step to a document Workflow process.'
+      operationId: post-AddWorkflowStep
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  ActionField: 0
+                  CellField: string
+                  DocIDField: "2147483647"
+                  EmailField: email@domain.com
+                  FirstNameField: John
+                  LanguageCodeField: ENG
+                  LastNameField: Smith
+                  ProxyAllowedField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/AddWorkflowStepV2Request'
+        description: '##### Add A Workflow Step Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocIDField: 2147483647
+                    FlowIDField: 1111112
+                    FlowStepsField:
+                    - ActionField: 0
+                      EmailField: John@domain.com
+                      FlowIDField: 2222222
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/AddWokflowStepV2Response'
+          description: '##### Add A Workflow Step Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Add a Workflow step
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /ApplyPrepperTemplate:
+    post:
+      description: '#### Used when applying a templaet to a document.'
+      operationId: post-ApplyPrepperTemplate
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: 2147483647
+                  PrepperTemplateIDField: 21344
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/ApplyPrepperTemplateRequest'
+        description: '##### Apply A Prepper Template Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/ApplyPrepperTemplateResponse'
+          description: '##### Apply A Prepper Template Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Apply a Prepper template
+      tags:
+      - Templates
+      x-contentType: application/json
+      x-accepts: application/json
+  /CancelFlow:
+    post:
+      description: '#### Used to cancel a document workflow.'
+      operationId: post-CancelFlow
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: "2147483647"
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/CancelFlowRequest'
+        description: '##### Cancel Flow Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocIDField: 2147483647
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/CancelFlowResponse'
+          description: '##### Cancel Flow Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Cancel Flow
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /CreatePortfolio:
+    post:
+      description: '#### Used to create a portfolio to group documents.'
+      operationId: post-CreatePortfolio
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: 2147483647
+                  PortfolioNameField: Application Portfolio
+                  TokenIDField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/CreatePortfolioRequest'
+        description: '##### Create Portfolio Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    PortfolioIDField: 13342
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/CreatePortfolioResponse'
+          description: '##### Create Portfolio Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Create Portfolio
+      tags:
+      - Portfolios
+      x-contentType: application/json
+      x-accepts: application/json
+  /DeleteDoc:
+    post:
+      description: '#### This is used to delete a document.'
+      operationId: post-DeleteDoc
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example-1:
+                value:
+                  DocIDField: 2147483647
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/DeleteDocRequest'
+        description: '##### Delete Document Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/DeleteDocResponse'
+          description: '##### Delete Document Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Delete Document
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /DocPrepperAdvancedFields:
+    post:
+      description: '#### Used to add advanced fields to a document.'
+      operationId: post-DocPrepperAdvancedFields
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  FieldInfoListField:
+                  - AdvancedFieldTypeField: 0
+                    DocIDField: 2147483647
+                    FieldOptionsListField:
+                    - LinkedValueField: string
+                      MaxField: 5
+                      MinField: 2
+                      ValueField: string
+                    FlowIDField: 11111
+                    FontFamilyField: Arial
+                    FontSizeField: 12
+                    HeightField: "30"
+                    WidthField: "15"
+                    LinkToField: string
+                    NameField: Text Field
+                    PageNumberField: 2
+                    SearchableField: true
+                    UserEmailField: John@domain.com
+                    ValueField: string
+                    XCoordinateField: "60"
+                    YCoordinateField: "120"
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/DocPrepperAddAdvancedFieldsRequest'
+        description: '##### Document Prepper Add Advanced Fields Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    AdvancedFieldResponseListField:
+                    - DocFieldIDField: 11111
+                      ResultField: success
+                    ResultField: success
+              schema:
+                $ref: '#/components/schemas/DocPrepperAddAdvancedFieldsResponse'
+          description: '##### Document Prepper Add Advanced Fields Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Document Prepper Add Advanced Fields
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /DocPrepperAddFieldsFlowID:
+    post:
+      description: '#### Used to add fields to a document using the user''s FlowID.'
+      operationId: post-DocPrepperAddField
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocFieldTypeField: 0
+                  DocIDField: 12344
+                  FlowIDField: 11111
+                  HeightField: "25"
+                  WidthField: "20"
+                  IsInvisibleField: true
+                  LinkToField: string
+                  PageNumberField: 2
+                  NameField: string
+                  UserEmailField: email@domain.com
+                  XCoordinateField: "50"
+                  YCoordinateField: "150"
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/DocPrepperAddFieldsFlowIDRequest'
+        description: '##### Document Prepper Add Fields Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocIDField: 12344
+                    FieldTypeField: 0
+                    HeightField: "20"
+                    PageNumberField: 2
+                    PrepperFieldIDField: 0
+                    ResultField: string
+                    UserIDField: 111112
+                    WidthField: "25"
+                    XCoordinateField: "60"
+                    YCoordinateField: "120"
+              schema:
+                $ref: '#/components/schemas/DocPrepperAddFieldsFlowIDResponse'
+          description: '##### Document Prepper Add Fields Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Document Prepper Add Fields
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /DownloadPortfolio:
+    post:
+      description: '#### Used to return a string that is then used to download a portfolio.'
+      operationId: post-DownloadPortfolio
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  PortfolioIDField: 111112
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/DownloadPortfolioRequest'
+        description: '##### Download Portfolio Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    PortfolioDataField: string
+                    PortfolioIDField: 11112
+                    PortfolioNameField: Application Portfolio
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/DownloadPortfolioResponse'
+          description: '##### Download Portfolio Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Download Portfolio
+      tags:
+      - Portfolios
+      x-contentType: application/json
+      x-accepts: application/json
+  /FullWorkflow:
+    post:
+      description: '#### Used to create a fullworkflow for a document.'
+      operationId: post-FullWorkflow
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  AdditionalDataField: string
+                  AutoRemindField: 0
+                  CustomMessageField: A message with things.
+                  DocField: string
+                  DocNameField: Document 1
+                  DueDateField: 02/02/2021
+                  ExtensionField: 0
+                  FlattenDocumentField: true
+                  KeepContentSecurityField: true
+                  KeepCustomPropertiesField: true
+                  KeepXMPMetadataField: true
+                  PortfolioInformationField:
+                    CreatePortfolioField: true
+                    LinkToPortfolioField: true
+                    PortfolioIDField: 11112
+                    PortfolioNameField: Portfolio 1
+                  PriorityField: 0
+                  SLAField: 0
+                  SendFirstEmailField: true
+                  SendWorkflowEmailsField: true
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+                  WorkflowUsersListField:
+                  - ActionField: 0
+                    AllowProxyField: 0
+                    AutoSignField: true
+                    EmailAddressField: email@domain.com
+                    GroupStepField:
+                      GroupMembersField:
+                      - LanguageCodeField: string
+                        UserEmailField: string
+                        UserFullNameField: string
+                        UserMobileNumberField: string
+                      GroupNameField: Managers
+                      RequiredNumberOfSignaturesField: 3
+                    LanguageCodeField: ENG
+                    LatitudeField: string
+                    LongitudeField: string
+                    MobileNumberField: 078 222 2222
+                    PreloadedFaceToFaceSignersField:
+                    - {}
+                    SignReasonField: Because yes
+                    SignerPasswordField: P@ssw0rd
+                    UserFirstNameField: John
+                    UserFullNameField: John Smith
+                    UserLastNameField: Smith
+                    WorkflowUserFieldsField:
+                    - FieldTypeField: 7
+                      FontFamilyField: Arial
+                      FontSizeField: 15
+                      GroupUserNumberField: 5
+                      HeightField: "15"
+                      IsInvisibleField: true
+                      PageNumberField: 2
+                      TagNameField: string
+                      ValueField: string
+                      WidthField: "25"
+                      XCoordinateField: "60"
+                      XOffsetField: 15
+                      YCoordinateField: "150"
+                      YOffsetField: 20
+            schema:
+              $ref: '#/components/schemas/FullWorkflowRequest'
+        description: '##### FullWorkflow Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocField: string
+                    DocIDField: 1237
+                    PortfolioIDField: 11112
+                    ResultField: string
+                    StatusField: Completed
+              schema:
+                $ref: '#/components/schemas/FullWorkflowResponse'
+          description: '##### FullWorkflow Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: FullWorkflow
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetAuditDocument:
+    post:
+      description: '#### Used to get an audit document.'
+      operationId: post-GetAuditDocument
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetAuditDocumentRequest'
+        description: '##### Get Audit Document Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    AuditDocumentField: string
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/GetAuditDocumentResponse'
+          description: '##### Get Audit Document Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Audit Document
+      tags:
+      - Audits
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetDocLink:
+    post:
+      description: '#### Used to get the document link that will be used to sign a
+        document.'
+      operationId: post-GetDocLink
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  EmailField: email@domain.com
+                  ReturnURLField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetDocLinkRequest'
+        description: '##### Get Document Link Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    Result: string
+                    Url: string
+              schema:
+                $ref: '#/components/schemas/GetDocLinkResponse'
+          description: '##### Get Document Link Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Document Link
+      tags:
+      - Viewers
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetDocStatus:
+    post:
+      description: '#### Used to get the status of the document ex. pending/completed/rejected.'
+      operationId: post-GetDocStatus
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetDocStatusRequest'
+        description: '##### Get Document Status Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocStatusField: string
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/GetDocStatusResponse'
+          description: '##### Get Document Status Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Document Status
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetDocumentPrepperLink:
+    post:
+      description: '#### Used to get a document prepper link (url).'
+      operationId: post-GetDocumentPrepperLink
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  EmailSettingField: 0
+                  ReturnURLField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetDocumentPrepperLinkRequest'
+        description: '##### Get Document Prepper Link Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    Result: string
+                    URL: string
+              schema:
+                $ref: '#/components/schemas/GetDocumentPrepperLinkResponse'
+          description: '##### Get Document Prepper Link Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Document Prepper Link
+      tags:
+      - Viewers
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetDocumentTagFieldBoxPosition:
+    post:
+      description: '#### Used to get the tag field box position on a document.'
+      operationId: post-GetDocumentTagFieldBoxPosition
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: 0
+                  TagNameField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetDocumentTagFieldBoxPositionRequest'
+        description: '##### Get Document Tag Field Box Position Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocumentTagFieldsBoxPositionField:
+                      HeightField: string
+                      PageNumberField: 0
+                      WidthField: string
+                      XCoordinateField: string
+                      YCoordinateField: string
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/GetDocumentTagFieldBoxPositionResponse'
+          description: '##### Get Document Tag Field Box Position Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Document Tag Field Box Position
+      tags:
+      - Templates
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetDocumentTagFieldPosition:
+    post:
+      description: '#### Used to get the tag position on a document.'
+      operationId: post-GetDocumentTagFieldPosition
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: 0
+                  TagNameField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetDocumentTagFieldPositionRequest'
+        description: '##### Get Document Tag Field Position Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocumentTagFieldsPositionField:
+                    - PageNumberField: 0
+                      XCoordinateField: string
+                      YCoordinateField: string
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/GetDocumentTagFieldPositionResponse'
+          description: '##### Get Document Tag Field Position Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Document Tag Field Position
+      tags:
+      - Templates
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetDocumentAudit:
+    post:
+      description: '#### Used to get the audit information from a document.'
+      operationId: post-GetDocumentAudit
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetDocumentAuditRequest'
+        description: '##### Get Document Audit Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ActivityField:
+                    - ActionOrderField: string
+                      AdditionalField: string
+                      DocIDField: string
+                      EmailField: email@domain.com
+                      EventDateField: string
+                      EventField: string
+                      EventStatusField: string
+                      LocationField: string
+                      OrderDateField: string
+                      PageField: string
+                      UserFullNameField: string
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/GetDocumentAuditResponse'
+          description: '##### Get Document Audit Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Document Audit
+      tags:
+      - Audits
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetPrepperTemplate:
+    post:
+      description: '#### Used to get a document template.'
+      operationId: post-GetPrepperTemplate
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: 0
+                  PrepperTemplateIDField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetPrepperTemplateRequest'
+        description: '##### Get Prepper Template Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    PrepperTemplateValuesField:
+                    - ColorField: string
+                      DocFieldIDField: string
+                      DocIDField: 0
+                      FieldTypeField: string
+                      HeightField: 0
+                      PageNumberField: 0
+                      UserFullNameField: string
+                      UserIDField: 0
+                      ValueField: string
+                      WidthField: 0
+                      XCoordinateField: 0
+                      YCoordinateField: 0
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/GetPrepperTemplateResponse'
+          description: '##### Get Prepper Template Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Prepper Template
+      tags:
+      - Templates
+      x-contentType: application/json
+      x-accepts: application/json
+  /GetPrepperTemplateList:
+    post:
+      description: '#### Used to get a list of document templates.'
+      operationId: post-GetPrepperTemplateList
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  TemplateFolderField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/GetPrepperTemplateListRequest'
+        description: '##### Get Prepper Template List Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: string
+                    TemplateInformationValuesField:
+                    - NameField: string
+                      PrepperTemplateIDField: 0
+                      TemplateDescriptionField: string
+              schema:
+                $ref: '#/components/schemas/GetPrepperTemplateListResponse'
+          description: '##### Get Prepper Template List Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Get Prepper Template List
+      tags:
+      - Templates
+      x-contentType: application/json
+      x-accepts: application/json
+  /InitiateFlow:
+    post:
+      description: '#### Used to initiate aworkflow of a document.'
+      operationId: post-InitiateFlow
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/InitiateFlowRequest'
+        description: '##### Initiate Flow Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocIDField: 0
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/InitiateFlowResponse'
+          description: '##### Initiate Flow Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Initiate Flow
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /InitiateFlow_No_Email:
+    post:
+      description: '#### Used to initiate a workflow without sending out emails.'
+      operationId: post-InitiateFlow_No_Email
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/InitiateFlow_No_EmailRequest'
+        description: '##### Initiate Flow No Email Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocIDField: 0
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/InitiateFlow_No_EmailResponse'
+          description: '##### Initiate Flow No Email Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Initiate Flow No Email
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /InitiateFlow_No_Initial_Email:
+    post:
+      description: '#### Used to initiate a document workflow without an initial email
+        being sent to the user.'
+      operationId: post-InitiateFlow_No_Initial_Email
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/InitiateFlow_No_Initial_EmailRequest'
+        description: '##### Initiate Flow No Initial Email Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    DocIDField: 0
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/InitiateFlow_No_Initial_EmailResponse'
+          description: '##### Initiate Flow No Initial Email Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Initiate Flow No Initial Email
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+  /LinkToPortfolio:
+    post:
+      description: '#### Used to get the url link to a portfolio.'
+      operationId: post-LinkToPortfolio
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  DocumentNameField: string
+                  PortfolioIDField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/LinkToPortfolioRequest'
+        description: '##### Link To Portfolio Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    PortfolioIDField: string
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/LinkToPortfolioResponse'
+          description: '##### Link To Portfolio Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Link To Portfolio
+      tags:
+      - Portfolios
+      x-contentType: application/json
+      x-accepts: application/json
+  /MultipleSignersSigningCeremony:
+    post:
+      description: '#### Used when there are multiple signers on a document.'
+      operationId: post-MultipleSignersSigningCeremony
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocField: string
+                  DocNameField: string
+                  LoginPasswordField: "12345"
+                  LoginUserNameField: John@gmail.com
+                  SignerListField:
+                  - SignatureHField: 0
+                    SignatureImageField: string
+                    SignatureImageIncludeBorderField: true
+                    SignatureImageIncludeReasonField: true
+                    SignatureImageIncludeSignedByField: true
+                    SignatureImageIncludeSignedDateField: true
+                    SignatureImageTypeField: 0
+                    SignaturePageField: 0
+                    SignatureWField: 0
+                    SignatureXField: 0
+                    SignatureYField: 0
+                    SignerEmailField: string
+                    SignerFullNameField: string
+                    SignerIndentificationNumberField: string
+                    SignerLocationField: string
+                    SignerMobileNumberField: string
+                    SignerReasonField: string
+                    SignerTrustOriginField: string
+                    SignerTrustReferenceField: string
+            schema:
+              $ref: '#/components/schemas/MultipleSignersSigningCeremonyRequest'
+        description: '##### Multiple Signers Signing Ceremony Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    CeremonyIDField: 0
+                    ResultField: string
+                    SignedDocumentField: string
+              schema:
+                $ref: '#/components/schemas/MultipleSignersSigningCeremonyResponse'
+          description: '##### Multiple Signers Signing Ceremony Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Multiple Signers Signing Ceremony
+      tags:
+      - Signing Ceremony
+      x-contentType: application/json
+      x-accepts: application/json
+  /SetDocumentOrder:
+    post:
+      description: '#### Used to set the order of documents that needs to be signed.'
+      operationId: post-SetDocumentOrder
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  DocumentOrderField: string
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/SetDocumentOrderRequest'
+        description: '##### Set Document Order Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/SetDocumentOrderResponse'
+          description: '##### Set Document Order Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Set Document Order
+      tags:
+      - Portfolios
+      x-contentType: application/json
+      x-accepts: application/json
+  /SharePortfolio:
+    post:
+      description: '#### Used when a user wants to share a portfolio with someone
+        else.'
+      operationId: post-SharePortfolio
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  AccessLevelField: 0
+                  PortfolioIDField: string
+                  ShareOptionField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+                  UniqueIDField: string
+            schema:
+              $ref: '#/components/schemas/SharePortfolioRequest'
+        description: '##### Share Portfolio Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/SharePortfolioResponse'
+          description: '##### Share Portfolio Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Share Portfolio
+      tags:
+      - Portfolios
+      x-contentType: application/json
+      x-accepts: application/json
+  /SharePortfolio_No_Email:
+    post:
+      description: '#### Used when a user wants to share a portfolio without sending
+        out an email.'
+      operationId: post-SharePortfolio_No_Email
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  AccessLevelField: 0
+                  PortfolioIDField: string
+                  ShareOptionField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+                  UniqueIDField: string
+            schema:
+              $ref: '#/components/schemas/SharePortfolio_No_EmailRequest'
+        description: '##### Share Portfolio No Email Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/SharePortfolio_No_EmailResponse'
+          description: '##### Share Portfolio No Email Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Share Portfolio No Email
+      tags:
+      - Portfolios
+      x-contentType: application/json
+      x-accepts: application/json
+  /SigningCeremonyV2:
+    post:
+      description: '#### Used to initiate the signing process of a document.'
+      operationId: post-SigningCeremonyV2
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  CheckboxFieldsListField:
+                  - CheckboxHField: 0
+                    CheckboxPageField: 0
+                    CheckboxWField: 0
+                    CheckboxXField: 0
+                    CheckboxYField: 0
+                    IsCheckedField: true
+                  DocField: string
+                  DocNameField: string
+                  InitialFieldsListField:
+                  - InitialHField: 0
+                    InitialImageField: string
+                    InitialImageTypeField: 0
+                    InitialPageField: 0
+                    InitialWField: 0
+                    InitialXField: 0
+                    InitialYField: 0
+                  LoginPasswordField: string
+                  LoginUserNameField: string
+                  SignatureHField: 0
+                  SignatureImageField: string
+                  SignatureImageIncludeBorderField: true
+                  SignatureImageIncludeReasonField: true
+                  SignatureImageIncludeSignedByField: true
+                  SignatureImageIncludeSignedDateField: true
+                  SignatureImageTypeField: 0
+                  SignaturePageField: 0
+                  SignatureWField: 0
+                  SignatureXField: 0
+                  SignatureYField: 0
+                  SignerEmailField: string
+                  SignerFullNameField: string
+                  SignerIdentificationNumberField: string
+                  SignerLocationField: string
+                  SignerMobileNumberField: string
+                  SignerReasonField: string
+                  SignerTrustOriginField: string
+                  SignerTrustReferenceField: string
+                  TextFieldsListField:
+                  - TextFieldHField: 0
+                    TextFieldPageField: 0
+                    TextFieldValueField: string
+                    TextFieldWField: 0
+                    TextFieldXField: 0
+                    TextFieldYField: 0
+            schema:
+              $ref: '#/components/schemas/SigningCeremonyV2Request'
+        description: '##### Signing Ceremony V2 Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    CeremonyIDField: 0
+                    ResultField: string
+                    SignedDocumentField: string
+              schema:
+                $ref: '#/components/schemas/SigningCeremonyV2Response'
+          description: '##### Signing Ceremony V2 Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Signing Ceremony V2
+      tags:
+      - Signing Ceremony
+      x-contentType: application/json
+      x-accepts: application/json
+  /TokenExtend:
+    post:
+      description: '#### Used to extend the period of time in which the session token
+        is valid.'
+      operationId: post-TokenExtend
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+                  TokenValidityField: 0
+            schema:
+              $ref: '#/components/schemas/TokenExtendRequest'
+        description: '##### Token Extend Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: string
+                    TokenField:
+                      TokenExpiryField: 2019-08-24T14:15:22Z
+                      TokenField: aaa111
+              schema:
+                $ref: '#/components/schemas/TokenExtendResponse'
+          description: '##### Token Extend Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Token Extend
+      tags:
+      - Authentication
+      x-contentType: application/json
+      x-accepts: application/json
+  /TokenValidate:
+    post:
+      description: '#### Used to validate the user''s session token.'
+      operationId: post-TokenValidate
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  "0": string
+            schema:
+              $ref: '#/components/schemas/TokenValidateRequest'
+        description: '##### Token Validate Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: string
+                    TokenField:
+                      TokenExpiryField: 2019-08-24T14:15:22Z
+                      TokenField: aaa111
+              schema:
+                $ref: '#/components/schemas/TokenValidateResponse'
+          description: '##### Token Validate Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Token Validate
+      tags:
+      - Authentication
+      x-contentType: application/json
+      x-accepts: application/json
+  /WorkflowSign:
+    post:
+      description: '#### Used to send a request to a user to sign a document workflow.'
+      operationId: post-WorkflowSign
+      parameters:
+      - explode: false
+        in: header
+        name: Content-Type
+        required: true
+        schema:
+          default: application/json
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Example:
+                value:
+                  DocIDField: string
+                  LatitudeField: string
+                  LoginPasswordField: pa$$word
+                  LoginUserNameField: email@domain.com
+                  LongitudeField: string
+                  SignReasonField: string
+                  TimeZoneOffsetField: 0
+                  TokenField:
+                    TokenExpiryField: 2019-08-24T14:15:22Z
+                    TokenField: aaa111
+            schema:
+              $ref: '#/components/schemas/WorkflowSignRequest'
+        description: '##### Workflow Sign Request Model'
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Example:
+                  value:
+                    ResultField: string
+              schema:
+                $ref: '#/components/schemas/WorkflowSignResponse'
+          description: '##### Workflow Sign Response Model'
+          headers:
+            Content-Type:
+              explode: false
+              schema:
+                default: application/json
+                type: string
+              style: simple
+      summary: Workflow Sign
+      tags:
+      - WorkFlow
+      x-contentType: application/json
+      x-accepts: application/json
+components:
+  parameters: {}
+  schemas:
+    LoginResponse:
+      description: '#### The response returned when a user Logs in.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        ResultField: success
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          readOnly: true
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      readOnly: true
+      required:
+      - ResultField
+      - TokenField
+      title: Login Response
+      type: object
+      x-examples:
+        Login Response Example:
+          value:
+            ResultField: success
+            TokenField:
+              TokenExpiryField: /Date(1624307263000+0200)/
+              TokenField: e6dgfh
+    LoginRequest:
+      description: '#### The request sent when a user Logs in.'
+      example:
+        UserNameField: email@domain.com
+        PasswordField: Password
+      properties:
+        UserNameField:
+          description: Email address of the user generating a Token
+          example: email@domain.com
+          format: email
+          minLength: 1
+          type: string
+          writeOnly: true
+        PasswordField:
+          description: SigniFlow user password
+          example: Password
+          format: password
+          minLength: 1
+          type: string
+          writeOnly: true
+      required:
+      - PasswordField
+      - UserNameField
+      title: Login Request
+      type: object
+      writeOnly: true
+      x-examples:
+        Example:
+          value:
+            UserNameField: email@domain.com
+            PasswordField: Password
+      x-internal: false
+    TokenField:
+      description: '#### Authentication Token'
+      example:
+        TokenField: aaa111
+        TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+      properties:
+        TokenExpiryField:
+          description: Expiry date of Token
+          format: date-time
+          type: string
+        TokenField:
+          description: User API Token
+          example: aaa111
+          type: string
+      required:
+      - TokenField
+      title: TokenField
+      type: object
+      x-examples:
+        Example:
+          value:
+            TokenExpiryField: 2019-08-24T14:15:22Z
+            TokenField: aaa111
+    ActionField:
+      default: 0
+      description: |
+        #### Is the action taken by a user in a workflow on this step.
+
+        `0 = SignDocument
+        1 = ViewDocument
+        2 = ApproveDocument`
+      enum:
+      - 0
+      - 1
+      - 2
+      maximum: 2
+      minimum: 0
+      title: ActionField
+      type: integer
+      x-enumNames:
+      - SignDocument
+      - ViewDocument
+      - ApproveDocument
+      x-enum-descriptions:
+      - Sign The Document
+      - View The Document
+      - Approve The Document
+      x-enum-varnames:
+      - SignDocument
+      - ViewDocument
+      - ApproveDocument
+    AutoRemind:
+      description: |-
+        #### Sets an Auto Reminder email to go out daily to workflow participants that have not signed the document.
+
+        `0 = No
+        1 = Yes`
+      enum:
+      - 0
+      - 1
+      maximum: 1
+      minimum: 0
+      title: AutoRemind
+      type: integer
+      x-enumNames:
+      - "No"
+      - "Yes"
+      x-enum-descriptions:
+      - Dont send daily reminders
+      - Send the recipient a daily reminder email
+      x-enum-varnames:
+      - "No"
+      - "Yes"
+    AutoExpire:
+      description: |
+        #### Sets an Auto Expire that will expire the document if not completed by the Due Date.
+
+        `0 = No
+        1 = Yes`
+      enum:
+      - 0
+      - 1
+      exclusiveMaximum: false
+      exclusiveMinimum: false
+      maximum: 1
+      minimum: 0
+      title: AutoExpire
+      type: integer
+      x-enumNames:
+      - "No"
+      - "Yes"
+      x-enum-descriptions:
+      - Workflow wont expire
+      - Expire the Workflow once due date is reached
+      x-enum-varnames:
+      - "No"
+      - "Yes"
+    Priority:
+      description: "#### The priority level of the workflow. \n\n`0 = Low\n1 = Normal\n\
+        2 = High`"
+      enum:
+      - 0
+      - 1
+      - 2
+      maximum: 2
+      minimum: 0
+      title: Priority
+      type: integer
+      x-enumNames:
+      - Low
+      - Normal
+      - High
+      x-enum-descriptions:
+      - Low
+      - Normal
+      - High
+      x-enum-varnames:
+      - Low
+      - Normal
+      - High
+    DocExtension:
+      description: "#### Document Extension \n\n`\n0 = pdf\n1 = xls\n2 = txt\n3 =\
+        \ xlsx\n4 = docx\n5 = doc\n6 = xml\n7 = png\n8 = jpg\n9 = gif\n`\n"
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      maximum: 9
+      minimum: 0
+      title: DocExtension
+      type: integer
+      x-enumNames:
+      - pdf
+      - xls
+      - txt
+      - xlsx
+      - docx
+      - doc
+      - xml
+      - png
+      - jpg
+      - gif
+      x-enum-descriptions:
+      - pdf
+      - xls
+      - txt
+      - xlsx
+      - docx
+      - doc
+      - xml
+      - png
+      - jpg
+      - gif
+      x-enum-varnames:
+      - pdf
+      - xls
+      - txt
+      - xlsx
+      - docx
+      - doc
+      - xml
+      - png
+      - jpg
+      - gif
+    CreateWorkflowRequest:
+      description: '#### The request sent to create a document workflow.'
+      example:
+        SLAField: 0
+        AdditionalDataField: '""'
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocField: String content
+        DueDateField: 2000-01-23T04:56:07.000+00:00
+        MessageField: String content
+        DocNameField: String content
+      properties:
+        AdditionalDataField:
+          description: Sets additional data to be embedded in PDF Meta.
+          example: '""'
+          type: string
+        AutoExpireField:
+          $ref: '#/components/schemas/AutoExpire'
+        AutoRemindField:
+          $ref: '#/components/schemas/AutoRemind'
+        DocField:
+          description: Base64 Encoded String of document
+          example: String content
+          type: string
+        DocNameField:
+          description: Name of document to display in SigniFlow
+          example: String content
+          type: string
+        DueDateField:
+          description: Due date for the document, use in conjunction with Auto Expire.
+          format: date-time
+          nullable: true
+          type: string
+        ExtensionField:
+          $ref: '#/components/schemas/DocExtension'
+        MessageField:
+          description: Custom message to display to participants
+          example: String content
+          type: string
+        PriorityField:
+          $ref: '#/components/schemas/Priority'
+        SLAField:
+          default: 0
+          description: Deprecated field, Pass 0
+          example: 0
+          maximum: 0
+          minimum: 0
+          type: integer
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - AdditionalDataField
+      - AutoExpireField
+      - AutoRemindField
+      - DocField
+      - DocNameField
+      - ExtensionField
+      - MessageField
+      - PriorityField
+      - SLAField
+      - TokenField
+      title: Create Workflow Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            AdditionalDataField: ""
+            AutoExpireField: 0
+            AutoRemindField: 0
+            DocField: Base64 Encoded Document
+            DocNameField: Document Name
+            DueDateField: 2019-08-24T14:15:22Z
+            ExtensionField: 0
+            MessageField: Message to participants
+            PriorityField: 0
+            SLAField: 0
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    CreateWorkflowResponse:
+      description: '#### The response returned when creating a document workflow.'
+      example:
+        DocIDField: 2147483647
+        ResultField: success
+      properties:
+        DocIDField:
+          description: Document Id created in SigniFlow
+          example: 2147483647
+          format: int32
+          type: integer
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          type: string
+      required:
+      - DocIDField
+      - ResultField
+      title: Create Workflow Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 2147483647
+            ResultField: success
+    GetDocumentRequest:
+      description: '#### The request sent when a user wants to download a document.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 2147483647
+      properties:
+        DocIDField:
+          description: Document ID generated by SigniFlow.
+          example: 2147483647
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Get Document Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 2147483647
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    GetDocumentResponse:
+      description: '#### The response returned when a user wants to download a document.'
+      example:
+        ExtensionField: pdf
+        ResultField: success
+        DocField: DocField
+        DocNameField: template
+      properties:
+        DocField:
+          description: Returns a base64 string as the document.
+          minLength: 1
+          type: string
+        DocNameField:
+          description: Document field name.
+          example: template
+          minLength: 1
+          type: string
+        ExtensionField:
+          description: Document extension field.
+          example: pdf
+          minLength: 1
+          type: string
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - DocField
+      - DocNameField
+      - ExtensionField
+      - ResultField
+      title: Get Document Response
+      type: object
+      x-examples:
+        Get Document Response Example:
+          value:
+            DocField: base64 string
+            DocNameField: template
+            ExtensionField: pdf
+            ResultField: success
+    AddWorkflowStepV2Request:
+      description: '#### Add a step to the Workflow request.'
+      example:
+        LanguageCodeField: ENG
+        FirstNameField: John
+        EmailField: email@domain.com
+        LastNameField: Smith
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: "2147483647"
+        CellField: CellField
+      properties:
+        ActionField:
+          $ref: '#/components/schemas/ActionField'
+        CellField:
+          description: Mobile number of participant
+          minLength: 1
+          type: string
+        DocIDField:
+          description: Document ID field.
+          example: "2147483647"
+          minLength: 1
+          type: string
+        EmailField:
+          description: Participant email address.
+          example: email@domain.com
+          format: email
+          minLength: 1
+          type: string
+        FirstNameField:
+          description: Participant firstname.
+          example: John
+          minLength: 1
+          type: string
+        LanguageCodeField:
+          description: |-
+            Participant 2 Digit ISO Language Code
+            `en = English
+            es = Spanish
+            fr = French
+            ect`
+          example: ENG
+          minLength: 1
+          type: string
+        LastNameField:
+          description: Participant last name.
+          example: Smith
+          minLength: 1
+          type: string
+        ProxyAllowedField:
+          $ref: '#/components/schemas/ProxyAllowedField'
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - ActionField
+      - CellField
+      - DocIDField
+      - EmailField
+      - FirstNameField
+      - LanguageCodeField
+      - LastNameField
+      - ProxyAllowedField
+      - TokenField
+      title: Add Workflow Step V2 Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            ActionField: 0
+            CellField: "1121231234"
+            DocIDField: "2147483647"
+            EmailField: email@domain.com
+            FirstNameField: John
+            LanguageCodeField: en
+            LastNameField: Smith
+            ProxyAllowedField: 0
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    AddWokflowStepV2Response:
+      description: '#### Add a step to a Workflow response.'
+      example:
+        DocIDField: 2147483647
+        FlowIDField: 1111112
+        FlowStepsField:
+        - EmailField: John@domain.com
+          FlowIDField: 2222222
+        - EmailField: John@domain.com
+          FlowIDField: 2222222
+        ResultField: success
+      properties:
+        DocIDField:
+          description: Document ID field.
+          example: 2147483647
+          type: number
+        FlowIDField:
+          description: Document flow ID field
+          example: 1111112
+          type: number
+        FlowStepsField:
+          items:
+            $ref: '#/components/schemas/AddWokflowStepV2Response_FlowStepsField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - DocIDField
+      - FlowIDField
+      - FlowStepsField
+      - ResultField
+      title: Add Workflow step V2 Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 2147483647
+            FlowIDField: 1111112
+            FlowStepsField:
+            - ActionField: 0
+              EmailField: John@domain.com
+              FlowIDField: 2222222
+            ResultField: success
+    ApplyPrepperTemplateRequest:
+      description: '#### Used to send a request for applying a template.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 2147483647
+        PrepperTemplateIDField: 21344
+      properties:
+        DocIDField:
+          description: Document ID field.
+          example: 2147483647
+          type: number
+        PrepperTemplateIDField:
+          description: Document prepper template ID field.
+          example: 21344
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - PrepperTemplateIDField
+      - TokenField
+      title: Apply Prepper Template Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 2147483647
+            PrepperTemplateIDField: 21344
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    ApplyPrepperTemplateResponse:
+      description: '#### Used to get the response afetr applying a template.'
+      example:
+        ResultField: success
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - ResultField
+      title: Apply Prepper Template Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: success
+    CancelFlowRequest:
+      description: '#### The request sent when a workflow is cancelled.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: "2147483647"
+      properties:
+        DocIDField:
+          description: Document ID field.
+          example: "2147483647"
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Cancel Flow Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: "2147483647"
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    CancelFlowResponse:
+      description: '#### The response returned when a user cancelled a workflow.'
+      example:
+        DocIDField: 2147483647
+        ResultField: success
+      properties:
+        DocIDField:
+          description: Document ID field.
+          example: 2147483647
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - DocIDField
+      - ResultField
+      title: Cancel Flow Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 2147483647
+            ResultField: success
+    CreatePortfolioRequest:
+      description: '#### Used to create a portfolio.'
+      example:
+        TokenIDField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 2147483647
+        PortfolioNameField: Application Portfolio
+      properties:
+        DocIDField:
+          description: Document ID field.
+          example: 2147483647
+          type: number
+        PortfolioNameField:
+          description: Portfolio name displayed in SigniFlow
+          example: Application Portfolio
+          minLength: 1
+          type: string
+        TokenIDField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - PortfolioNameField
+      - TokenIDField
+      title: Create Portfolio Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 2147483647
+            PortfolioNameField: Application Portfolio
+            TokenIDField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    CreatePortfolioResponse:
+      description: '#### The response received after a portfolio is created.'
+      example:
+        ResultField: success
+        PortfolioIDField: 13342
+      properties:
+        PortfolioIDField:
+          description: Document portfolio ID field.
+          example: 13342
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - PortfolioIDField
+      - ResultField
+      title: Create Portfolio Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            PortfolioIDField: 13342
+            ResultField: success
+    DeleteDocRequest:
+      description: '#### This is the request used to delete a document.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 2147483647
+      properties:
+        DocIDField:
+          description: Document ID field.
+          example: 2147483647
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Delete Document Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 2147483647
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    DeleteDocResponse:
+      description: '#### This is the response that will be returned when a document
+        is deleted.'
+      example:
+        ResultField: success
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - ResultField
+      title: Delete Document Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: success
+    DocPrepperAddAdvancedFieldsRequest:
+      description: '#### A request sent to add advanced fields to a document.'
+      example:
+        FieldInfoListField:
+        - FontSizeField: 12
+          PageNumberField: 2
+          WidthField: "15"
+          XCoordinateField: "60"
+          FieldOptionsListField:
+          - MinField: 2
+            LinkedValueField: LinkedValueField
+            MaxField: 5
+            ValueField: ValueField
+          - MinField: 2
+            LinkedValueField: LinkedValueField
+            MaxField: 5
+            ValueField: ValueField
+          FlowIDField: 11111
+          SearchableField: true
+          HeightField: "30"
+          LinkToField: LinkToField
+          FontFamilyField: Arial
+          YCoordinateField: "120"
+          NameField: Text Field
+          DocIDField: 2147483647
+          UserEmailField: John@domain.com
+          ValueField: ValueField
+        - FontSizeField: 12
+          PageNumberField: 2
+          WidthField: "15"
+          XCoordinateField: "60"
+          FieldOptionsListField:
+          - MinField: 2
+            LinkedValueField: LinkedValueField
+            MaxField: 5
+            ValueField: ValueField
+          - MinField: 2
+            LinkedValueField: LinkedValueField
+            MaxField: 5
+            ValueField: ValueField
+          FlowIDField: 11111
+          SearchableField: true
+          HeightField: "30"
+          LinkToField: LinkToField
+          FontFamilyField: Arial
+          YCoordinateField: "120"
+          NameField: Text Field
+          DocIDField: 2147483647
+          UserEmailField: John@domain.com
+          ValueField: ValueField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+      properties:
+        FieldInfoListField:
+          description: Field information list field.
+          items:
+            $ref: '#/components/schemas/DocPrepperAddAdvancedFieldsRequest_FieldInfoListField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - FieldInfoListField
+      - TokenField
+      title: Document Prepper Add Advanced Fields Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            FieldInfoListField:
+            - AdvancedFieldTypeField: 0
+              DocIDField: 2147483647
+              FieldOptionsListField:
+              - LinkedValueField: string
+                MaxField: 5
+                MinField: 2
+                ValueField: string
+              FlowIDField: 11111
+              FontFamilyField: Arial
+              FontSizeField: 12
+              HeightField: "30"
+              LinkToField: string
+              NameField: Text Field
+              PageNumberField: 2
+              SearchableField: true
+              UserEmailField: John@domain.com
+              ValueField: string
+              WidthField: "15"
+              XCoordinateField: "60"
+              YCoordinateField: "120"
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    DocPrepperAddAdvancedFieldsResponse:
+      description: '#### This is the response when adding advanced fields to a document.'
+      example:
+        AdvancedFieldResponseListField:
+        - DocFieldIDField: 11111
+          ResultField: success
+        - DocFieldIDField: 11111
+          ResultField: success
+        ResultField: success
+      properties:
+        AdvancedFieldResponseListField:
+          items:
+            $ref: '#/components/schemas/DocPrepperAddAdvancedFieldsResponse_AdvancedFieldResponseListField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - AdvancedFieldResponseListField
+      - ResultField
+      title: Document Prepper Add Advanced Fields Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            AdvancedFieldResponseListField:
+            - DocFieldIDField: 11111
+              ResultField: success
+            ResultField: success
+    DocPrepperAddFieldsFlowIDRequest:
+      description: '#### The request sent when fields are added to a document using
+        a FlowID.'
+      example:
+        PageNumberField: 2
+        WidthField: "20"
+        XCoordinateField: "50"
+        FlowIDField: 11111
+        HeightField: "25"
+        LinkToField: LinkToField
+        YCoordinateField: "150"
+        NameField: NameField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 12344
+        UserEmailField: email@domain.com
+        IsInvisibleField: true
+      properties:
+        DocFieldTypeField:
+          $ref: '#/components/schemas/FieldType'
+        DocIDField:
+          description: Document ID.
+          example: 12344
+          type: number
+        FlowIDField:
+          description: Document Flow ID.
+          example: 11111
+          type: number
+        HeightField:
+          description: Field height.
+          example: "25"
+          minLength: 1
+          type: string
+        WidthField:
+          description: Field width.
+          example: "20"
+          minLength: 1
+          type: string
+        IsInvisibleField:
+          description: Is the field invisible.
+          type: boolean
+        LinkToField:
+          description: Document link.
+          minLength: 1
+          type: string
+        PageNumberField:
+          description: Field page number.
+          example: 2
+          type: number
+        NameField:
+          description: Field name field.
+          minLength: 1
+          type: string
+        UserEmailField:
+          description: User email address field.
+          example: email@domain.com
+          format: email
+          minLength: 1
+          type: string
+        XCoordinateField:
+          description: Document field x-coordinates.
+          example: "50"
+          minLength: 1
+          type: string
+        YCoordinateField:
+          description: Document field y-coordinates.
+          example: "150"
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocFieldTypeField
+      - DocIDField
+      - FlowIDField
+      - HeightField
+      - IsInvisibleField
+      - LinkToField
+      - NameField
+      - PageNumberField
+      - TokenField
+      - UserEmailField
+      - WidthField
+      - XCoordinateField
+      - YCoordinateField
+      title: Document Prepper Add Fields FlowID Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocFieldTypeField: 5
+            DocIDField: 12344
+            FlowIDField: 11111
+            HeightField: "25"
+            IsInvisibleField: true
+            LinkToField: string
+            NameField: string
+            PageNumberField: 2
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+            UserEmailField: email@domain.com
+            WidthField: "20"
+            XCoordinateField: "50"
+            YCoordinateField: "150"
+    DocPrepperAddFieldsFlowIDResponse:
+      description: '#### The response retuenrd when fields are added to a document
+        using a FlowID.'
+      example:
+        PageNumberField: 2
+        YCoordinateField: "120"
+        WidthField: "25"
+        XCoordinateField: "60"
+        PrepperFieldIDField: 0.8008281904610115
+        DocIDField: 12344
+        UserIDField: 111112
+        ResultField: ResultField
+        HeightField: "20"
+      properties:
+        DocIDField:
+          description: Document ID.
+          example: 12344
+          type: number
+        FieldTypeField:
+          $ref: '#/components/schemas/FieldType'
+        HeightField:
+          description: The height of the field.
+          example: "20"
+          minLength: 1
+          type: string
+        PageNumberField:
+          description: Field page number.
+          example: 2
+          type: number
+        PrepperFieldIDField:
+          description: Document prepper field ID.
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        UserIDField:
+          description: SigniFlow User ID
+          example: 111112
+          type: number
+        WidthField:
+          description: The width of the field.
+          example: "25"
+          minLength: 1
+          type: string
+        XCoordinateField:
+          description: X-coordinates of the field.
+          example: "60"
+          minLength: 1
+          type: string
+        YCoordinateField:
+          description: Y-coordinates of the field.
+          example: "120"
+          minLength: 1
+          type: string
+      required:
+      - DocIDField
+      - FieldTypeField
+      - HeightField
+      - PageNumberField
+      - PrepperFieldIDField
+      - ResultField
+      - UserIDField
+      - WidthField
+      - XCoordinateField
+      - YCoordinateField
+      title: Document Prepper Add Fields FlowID Response
+      type: object
+      x-examples:
+        Document Prepper Add Fields FlowID Response Example:
+          value:
+            DocIDField: 12344
+            FieldTypeField: string
+            HeightField: "20"
+            PageNumberField: 2
+            PrepperFieldIDField: 0
+            ResultField: string
+            UserIDField: 111112
+            WidthField: "25"
+            XCoordinateField: "60"
+            YCoordinateField: "120"
+    DownloadPortfolioRequest:
+      description: '#### The request sent when a user wants to download a portfolio.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        PortfolioIDField: 111112
+      properties:
+        PortfolioIDField:
+          description: Portfolio ID.
+          example: 111112
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - PortfolioIDField
+      - TokenField
+      title: Download Portfolio Request
+      type: object
+      x-examples:
+        Download Portfolio Request Example:
+          value:
+            PortfolioIDField: 111112
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    DownloadPortfolioResponse:
+      description: '#### The response returned when a user wants to download a portfolio.'
+      example:
+        PortfolioDataField: PortfolioDataField
+        PortfolioNameField: Application Portfolio
+        ResultField: ResultField
+        PortfolioIDField: 11112
+      properties:
+        PortfolioDataField:
+          description: Portfolio data field.
+          minLength: 1
+          type: string
+        PortfolioIDField:
+          description: Portfolio ID.
+          example: 11112
+          type: number
+        PortfolioNameField:
+          description: Portfolio name.
+          example: Application Portfolio
+          minLength: 1
+          type: string
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - PortfolioDataField
+      - PortfolioIDField
+      - PortfolioNameField
+      - ResultField
+      title: Download Portfolio Response
+      type: object
+      x-examples:
+        Download Portfolio Response Example:
+          value:
+            PortfolioDataField: string
+            PortfolioIDField: 11112
+            PortfolioNameField: Application Portfolio
+            ResultField: string
+    FullWorkflowRequest:
+      description: '#### Request a fullworkflow of a document.'
+      example:
+        SLAField: 6.027456183070403
+        WorkflowUsersListField:
+        - UserFullNameField: John Smith
+          MobileNumberField: 078 222 2222
+          PreloadedFaceToFaceSignersField:
+          - '{}'
+          - '{}'
+          SignerPasswordField: P@ssw0rd
+          LongitudeField: LongitudeField
+          ActionField: 1.4658129805029452
+          EmailAddressField: email@domain.com
+          GroupStepField:
+            GroupNameField: Managers
+            RequiredNumberOfSignaturesField: 3
+            GroupMembersField:
+            - LanguageCodeField: LanguageCodeField
+              UserFullNameField: UserFullNameField
+              UserMobileNumberField: UserMobileNumberField
+              UserEmailField: UserEmailField
+            - LanguageCodeField: LanguageCodeField
+              UserFullNameField: UserFullNameField
+              UserMobileNumberField: UserMobileNumberField
+              UserEmailField: UserEmailField
+          LanguageCodeField: ENG
+          UserFirstNameField: John
+          AllowProxyField: 5.962133916683182
+          AutoSignField: true
+          WorkflowUserFieldsField:
+          - FieldTypeField: 7
+            TagNameField: TagNameField
+            FontSizeField: 15
+            PageNumberField: 2
+            WidthField: "25"
+            XCoordinateField: "60"
+            XOffsetField: 15
+            HeightField: "15"
+            FontFamilyField: Arial
+            YCoordinateField: "150"
+            GroupUserNumberField: 5
+            YOffsetField: 20
+            IsInvisibleField: true
+            ValueField: ValueField
+          - FieldTypeField: 7
+            TagNameField: TagNameField
+            FontSizeField: 15
+            PageNumberField: 2
+            WidthField: "25"
+            XCoordinateField: "60"
+            XOffsetField: 15
+            HeightField: "15"
+            FontFamilyField: Arial
+            YCoordinateField: "150"
+            GroupUserNumberField: 5
+            YOffsetField: 20
+            IsInvisibleField: true
+            ValueField: ValueField
+          SignReasonField: Because yes
+          LatitudeField: LatitudeField
+          UserLastNameField: Smith
+        - UserFullNameField: John Smith
+          MobileNumberField: 078 222 2222
+          PreloadedFaceToFaceSignersField:
+          - '{}'
+          - '{}'
+          SignerPasswordField: P@ssw0rd
+          LongitudeField: LongitudeField
+          ActionField: 1.4658129805029452
+          EmailAddressField: email@domain.com
+          GroupStepField:
+            GroupNameField: Managers
+            RequiredNumberOfSignaturesField: 3
+            GroupMembersField:
+            - LanguageCodeField: LanguageCodeField
+              UserFullNameField: UserFullNameField
+              UserMobileNumberField: UserMobileNumberField
+              UserEmailField: UserEmailField
+            - LanguageCodeField: LanguageCodeField
+              UserFullNameField: UserFullNameField
+              UserMobileNumberField: UserMobileNumberField
+              UserEmailField: UserEmailField
+          LanguageCodeField: ENG
+          UserFirstNameField: John
+          AllowProxyField: 5.962133916683182
+          AutoSignField: true
+          WorkflowUserFieldsField:
+          - FieldTypeField: 7
+            TagNameField: TagNameField
+            FontSizeField: 15
+            PageNumberField: 2
+            WidthField: "25"
+            XCoordinateField: "60"
+            XOffsetField: 15
+            HeightField: "15"
+            FontFamilyField: Arial
+            YCoordinateField: "150"
+            GroupUserNumberField: 5
+            YOffsetField: 20
+            IsInvisibleField: true
+            ValueField: ValueField
+          - FieldTypeField: 7
+            TagNameField: TagNameField
+            FontSizeField: 15
+            PageNumberField: 2
+            WidthField: "25"
+            XCoordinateField: "60"
+            XOffsetField: 15
+            HeightField: "15"
+            FontFamilyField: Arial
+            YCoordinateField: "150"
+            GroupUserNumberField: 5
+            YOffsetField: 20
+            IsInvisibleField: true
+            ValueField: ValueField
+          SignReasonField: Because yes
+          LatitudeField: LatitudeField
+          UserLastNameField: Smith
+        FlattenDocumentField: true
+        PortfolioInformationField:
+          CreatePortfolioField: true
+          PortfolioNameField: Portfolio 1
+          LinkToPortfolioField: true
+          PortfolioIDField: 11112
+        KeepContentSecurityField: true
+        KeepXMPMetadataField: true
+        SendFirstEmailField: true
+        DocNameField: Document 1
+        CustomMessageField: A message with things.
+        KeepCustomPropertiesField: true
+        PriorityField: 0.8008281904610115
+        AdditionalDataField: AdditionalDataField
+        SendWorkflowEmailsField: true
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocField: DocField
+        DueDateField: 02/02/2021
+      properties:
+        AdditionalDataField:
+          description: Additional data.
+          minLength: 1
+          type: string
+        AutoRemindField:
+          $ref: '#/components/schemas/AutoRemind'
+        CustomMessageField:
+          description: Custom message.
+          example: A message with things.
+          minLength: 1
+          type: string
+        DocField:
+          description: Document field.
+          minLength: 1
+          type: string
+        DocNameField:
+          description: Document name.
+          example: Document 1
+          minLength: 1
+          type: string
+        DueDateField:
+          description: Document due date.
+          example: 02/02/2021
+          minLength: 1
+          type: string
+        ExtensionField:
+          $ref: '#/components/schemas/DocExtension'
+        FlattenDocumentField:
+          description: Flatten document.
+          type: boolean
+        KeepContentSecurityField:
+          description: Keep content security.
+          type: boolean
+        KeepCustomPropertiesField:
+          description: Keep custom properties.
+          type: boolean
+        KeepXMPMetadataField:
+          description: Keep XMP meta data.
+          type: boolean
+        PortfolioInformationField:
+          $ref: '#/components/schemas/FullWorkflowRequest_PortfolioInformationField'
+        PriorityField:
+          description: Document priority.
+          type: number
+        SLAField:
+          description: SLA
+          type: number
+        SendFirstEmailField:
+          description: Confirm first user email notification will or will not be sent.
+          type: boolean
+        SendWorkflowEmailsField:
+          description: Confirm that workflow emails will or will not be sent.
+          type: boolean
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+        WorkflowUsersListField:
+          description: List of users in the workflow.
+          items:
+            $ref: '#/components/schemas/FullWorkflowRequest_WorkflowUsersListField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - AdditionalDataField
+      - AutoRemindField
+      - CustomMessageField
+      - DocField
+      - DocNameField
+      - DueDateField
+      - ExtensionField
+      - FlattenDocumentField
+      - KeepContentSecurityField
+      - KeepCustomPropertiesField
+      - KeepXMPMetadataField
+      - PortfolioInformationField
+      - PriorityField
+      - SLAField
+      - SendFirstEmailField
+      - SendWorkflowEmailsField
+      - TokenField
+      - WorkflowUsersListField
+      title: FullWorkflow Request
+      type: object
+      x-examples:
+        FullWorkflow Request Example:
+          value:
+            AdditionalDataField: string
+            AutoRemindField: 0
+            CustomMessageField: A message with things.
+            DocField: string
+            DocNameField: Document 1
+            DueDateField: 02/02/2021
+            ExtensionField: .pdf
+            FlattenDocumentField: true
+            KeepContentSecurityField: true
+            KeepCustomPropertiesField: true
+            KeepXMPMetadataField: true
+            PortfolioInformationField:
+              CreatePortfolioField: true
+              LinkToPortfolioField: true
+              PortfolioIDField: 11112
+              PortfolioNameField: Portfolio 1
+            PriorityField: 0
+            SLAField: 0
+            SendFirstEmailField: true
+            SendWorkflowEmailsField: true
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+            WorkflowUsersListField:
+            - ActionField: 0
+              AllowProxyField: 0
+              AutoSignField: true
+              EmailAddressField: email@domain.com
+              GroupStepField:
+                GroupMembersField:
+                - LanguageCodeField: string
+                  UserEmailField: string
+                  UserFullNameField: string
+                  UserMobileNumberField: string
+                GroupNameField: Managers
+                RequiredNumberOfSignaturesField: 3
+              LanguageCodeField: ENG
+              LatitudeField: string
+              LongitudeField: string
+              MobileNumberField: 078 222 2222
+              PreloadedFaceToFaceSignersField:
+              - {}
+              SignReasonField: Because yes
+              SignerPasswordField: P@ssw0rd
+              UserFirstNameField: John
+              UserFullNameField: John Smith
+              UserLastNameField: Smith
+              WorkflowUserFieldsField:
+              - FieldTypeField: 7
+                FontFamilyField: Arial
+                FontSizeField: 15
+                GroupUserNumberField: 5
+                HeightField: "15"
+                IsInvisibleField: true
+                PageNumberField: 2
+                TagNameField: string
+                ValueField: string
+                WidthField: "25"
+                XCoordinateField: "60"
+                XOffsetField: 15
+                YCoordinateField: "150"
+                YOffsetField: 20
+    FullWorkflowResponse:
+      description: '#### The response returned on FullWorkflow.'
+      example:
+        DocIDField: 1237
+        ResultField: ResultField
+        DocField: DocField
+        StatusField: Completed
+        PortfolioIDField: 11112
+      properties:
+        DocField:
+          minLength: 1
+          type: string
+        DocIDField:
+          example: 1237
+          type: number
+        PortfolioIDField:
+          example: 11112
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        StatusField:
+          example: Completed
+          minLength: 1
+          type: string
+      required:
+      - DocField
+      - DocIDField
+      - PortfolioIDField
+      - ResultField
+      - StatusField
+      title: FullWorkflow Response
+      type: object
+      x-examples:
+        FullWorkflow Response Example:
+          value:
+            DocField: string
+            DocIDField: 1237
+            PortfolioIDField: 11112
+            ResultField: string
+            StatusField: Completed
+    GetAuditDocumentRequest:
+      description: '#### A request sent to get an audit document.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+      properties:
+        DocIDField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Get Audit Document Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    GetAuditDocumentResponse:
+      description: '#### The response returned when requesting and audit document.'
+      example:
+        AuditDocumentField: AuditDocumentField
+        ResultField: ResultField
+      properties:
+        AuditDocumentField:
+          minLength: 1
+          type: string
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - AuditDocumentField
+      - ResultField
+      title: Get Audit Document Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            AuditDocumentField: string
+            ResultField: string
+    GetDocLinkRequest:
+      description: '#### This is a request to get the document url.'
+      example:
+        ReturnURLField: ReturnURLField
+        EmailField: email@domain.com
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+      properties:
+        DocIDField:
+          minLength: 1
+          type: string
+        EmailField:
+          example: email@domain.com
+          minLength: 1
+          type: string
+        ReturnURLField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - EmailField
+      - ReturnURLField
+      - TokenField
+      title: Get Document Link Request
+      type: object
+      x-examples: {}
+    GetDocLinkResponse:
+      description: '#### This is the response returned when a document url is requested.'
+      example:
+        Url: Url
+        Result: Result
+      properties:
+        Result:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        Url:
+          description: URL
+          minLength: 1
+          type: string
+      required:
+      - Result
+      - Url
+      title: Get Document Link Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            Result: string
+            Url: string
+    GetDocStatusRequest:
+      description: '#### This is the request used to get the document status.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 0.8008281904610115
+      properties:
+        DocIDField:
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Get Document Status Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 0
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    GetDocStatusResponse:
+      description: '#### This is the response returned when a document status has
+        been requested.'
+      example:
+        DocStatusField: DocStatusField
+        ResultField: ResultField
+      properties:
+        DocStatusField:
+          description: Status of the document.
+          minLength: 1
+          type: string
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - DocStatusField
+      - ResultField
+      title: Get Document Status Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocStatusField: string
+            ResultField: string
+    GetDocumentPrepperLinkRequest:
+      description: '#### This is the request sent to get a documnt prepper url.'
+      example:
+        ReturnURLField: ReturnURLField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+        EmailSettingField: 0.8008281904610115
+      properties:
+        DocIDField:
+          minLength: 1
+          type: string
+        EmailSettingField:
+          type: number
+        ReturnURLField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - EmailSettingField
+      - ReturnURLField
+      - TokenField
+      title: Get Document Prepper Link Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: string
+            EmailSettingField: 0
+            ReturnURLField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    GetDocumentPrepperLinkResponse:
+      description: '#### This is the response returned when requesting a document
+        prepper url.'
+      example:
+        URL: URL
+        Result: Result
+      properties:
+        Result:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        URL:
+          description: Url
+          minLength: 1
+          type: string
+      required:
+      - Result
+      - URL
+      title: Get Document Prepper Link Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            Result: string
+            URL: string
+    GetDocumentTagFieldBoxPositionRequest:
+      description: '#### The request sent to get the document tag field box position.'
+      example:
+        TagNameField: TagNameField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 0.8008281904610115
+      properties:
+        DocIDField:
+          type: number
+        TagNameField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TagNameField
+      - TokenField
+      title: Get Document Tag Field Box Position Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 0
+            TagNameField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    GetDocumentTagFieldBoxPositionResponse:
+      description: '#### The response returned after requesting the document tag field
+        ox position.'
+      example:
+        DocumentTagFieldsBoxPositionField:
+          PageNumberField: 0.8008281904610115
+          YCoordinateField: YCoordinateField
+          WidthField: WidthField
+          XCoordinateField: XCoordinateField
+          HeightField: HeightField
+        ResultField: ResultField
+      properties:
+        DocumentTagFieldsBoxPositionField:
+          $ref: '#/components/schemas/GetDocumentTagFieldBoxPositionResponse_DocumentTagFieldsBoxPositionField'
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - DocumentTagFieldsBoxPositionField
+      - ResultField
+      title: Get Document Tag Field Box Position Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocumentTagFieldsBoxPositionField:
+              HeightField: string
+              PageNumberField: 0
+              WidthField: string
+              XCoordinateField: string
+              YCoordinateField: string
+            ResultField: string
+    GetDocumentTagFieldPositionRequest:
+      description: '#### The request sent to get the document tag field position.'
+      example:
+        TagNameField: TagNameField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 0.8008281904610115
+      properties:
+        DocIDField:
+          type: number
+        TagNameField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TagNameField
+      - TokenField
+      title: Get Document Tag Field Position Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 0
+            TagNameField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    GetDocumentTagFieldPositionResponse:
+      description: '#### The response returned when requesting the document tag field
+        position.'
+      example:
+        DocumentTagFieldsPositionField:
+        - PageNumberField: 0.8008281904610115
+          YCoordinateField: YCoordinateField
+          XCoordinateField: XCoordinateField
+        - PageNumberField: 0.8008281904610115
+          YCoordinateField: YCoordinateField
+          XCoordinateField: XCoordinateField
+        ResultField: ResultField
+      properties:
+        DocumentTagFieldsPositionField:
+          items:
+            $ref: '#/components/schemas/GetDocumentTagFieldPositionResponse_DocumentTagFieldsPositionField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - DocumentTagFieldsPositionField
+      - ResultField
+      title: Get Document Tag Field Position Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocumentTagFieldsPositionField:
+            - PageNumberField: 0
+              XCoordinateField: string
+              YCoordinateField: string
+            ResultField: string
+    GetDocumentAuditRequest:
+      description: '#### The request sent to get the audit information from a document.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+      properties:
+        DocIDField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Get Document Audit Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    GetDocumentAuditResponse:
+      description: '#### The response returned after requesting the audit information
+        from a document.'
+      example:
+        ActivityField:
+        - PageField: PageField
+          UserFullNameField: UserFullNameField
+          EventDateField: EventDateField
+          AdditionalField: AdditionalField
+          LocationField: LocationField
+          EmailField: email@domain.com
+          EventField: EventField
+          DocIDField: DocIDField
+          EventStatusField: EventStatusField
+          OrderDateField: OrderDateField
+          ActionOrderField: ActionOrderField
+        - PageField: PageField
+          UserFullNameField: UserFullNameField
+          EventDateField: EventDateField
+          AdditionalField: AdditionalField
+          LocationField: LocationField
+          EmailField: email@domain.com
+          EventField: EventField
+          DocIDField: DocIDField
+          EventStatusField: EventStatusField
+          OrderDateField: OrderDateField
+          ActionOrderField: ActionOrderField
+        ResultField: ResultField
+      properties:
+        ActivityField:
+          items:
+            $ref: '#/components/schemas/GetDocumentAuditResponse_ActivityField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - ActivityField
+      - ResultField
+      title: Get Document Audit Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ActivityField:
+            - ActionOrderField: string
+              AdditionalField: string
+              DocIDField: string
+              EmailField: email@domain.com
+              EventDateField: string
+              EventField: string
+              EventStatusField: string
+              LocationField: string
+              OrderDateField: string
+              PageField: string
+              UserFullNameField: string
+            ResultField: string
+    GetPrepperTemplateRequest:
+      description: '#### The request used to get templates.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: 0.8008281904610115
+        PrepperTemplateIDField: 6.027456183070403
+      properties:
+        DocIDField:
+          type: number
+        PrepperTemplateIDField:
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - PrepperTemplateIDField
+      - TokenField
+      title: Get Prepper Template Request
+      type: object
+      x-examples: {}
+    GetPrepperTemplateResponse:
+      description: '#### The response received after requesting a document template.'
+      example:
+        ResultField: ResultField
+        PrepperTemplateValuesField:
+        - FieldTypeField: FieldTypeField
+          UserFullNameField: UserFullNameField
+          DocFieldIDField: DocFieldIDField
+          PageNumberField: 1.4658129805029452
+          YCoordinateField: 7.061401241503109
+          WidthField: 5.637376656633329
+          XCoordinateField: 2.3021358869347655
+          DocIDField: 0.8008281904610115
+          UserIDField: 5.962133916683182
+          ColorField: ColorField
+          ValueField: ValueField
+          HeightField: 6.027456183070403
+        - FieldTypeField: FieldTypeField
+          UserFullNameField: UserFullNameField
+          DocFieldIDField: DocFieldIDField
+          PageNumberField: 1.4658129805029452
+          YCoordinateField: 7.061401241503109
+          WidthField: 5.637376656633329
+          XCoordinateField: 2.3021358869347655
+          DocIDField: 0.8008281904610115
+          UserIDField: 5.962133916683182
+          ColorField: ColorField
+          ValueField: ValueField
+          HeightField: 6.027456183070403
+      properties:
+        PrepperTemplateValuesField:
+          items:
+            $ref: '#/components/schemas/GetPrepperTemplateResponse_PrepperTemplateValuesField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - PrepperTemplateValuesField
+      - ResultField
+      title: Get Prepper Template Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            PrepperTemplateValuesField:
+            - ColorField: string
+              DocFieldIDField: string
+              DocIDField: 0
+              FieldTypeField: string
+              HeightField: 0
+              PageNumberField: 0
+              UserFullNameField: string
+              UserIDField: 0
+              ValueField: string
+              WidthField: 0
+              XCoordinateField: 0
+              YCoordinateField: 0
+            ResultField: string
+    GetPrepperTemplateListRequest:
+      description: '#### The request sent to get the document template list.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        TemplateFolderField: 0.8008281904610115
+      properties:
+        TemplateFolderField:
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - TemplateFolderField
+      - TokenField
+      title: Get Prepper Template List Request
+      type: object
+      x-examples: {}
+    GetPrepperTemplateListResponse:
+      description: '#### The response returned when the document template list gets
+        requested.'
+      example:
+        TemplateInformationValuesField:
+        - TemplateDescriptionField: TemplateDescriptionField
+          NameField: NameField
+          PrepperTemplateIDField: 0.8008281904610115
+        - TemplateDescriptionField: TemplateDescriptionField
+          NameField: NameField
+          PrepperTemplateIDField: 0.8008281904610115
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        TemplateInformationValuesField:
+          items:
+            $ref: '#/components/schemas/GetPrepperTemplateListResponse_TemplateInformationValuesField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - ResultField
+      - TemplateInformationValuesField
+      title: Get Prepper Template List Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+            TemplateInformationValuesField:
+            - NameField: string
+              PrepperTemplateIDField: 0
+              TemplateDescriptionField: string
+    InitiateFlowRequest:
+      description: '#### The request sent to initiate a workflow on a document.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+      properties:
+        DocIDField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Initiate Flow Request
+      type: object
+      x-examples: {}
+    InitiateFlowResponse:
+      description: '#### The response returned when a workflow is initiated.'
+      example:
+        DocIDField: 0.8008281904610115
+        ResultField: ResultField
+      properties:
+        DocIDField:
+          description: The document ID.
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - DocIDField
+      - ResultField
+      title: Initiate Flow Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 0
+            ResultField: string
+    InitiateFlow_No_EmailRequest:
+      description: '#### The request sent to initiate a workflow without sending an
+        email.'
+      properties:
+        DocIDField:
+          description: The document ID.
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Initiate Flow No Email Request
+      type: object
+      x-examples: {}
+    InitiateFlow_No_EmailResponse:
+      description: '#### The response returned when a workflow is requested without
+        any email.'
+      example:
+        DocIDField: 0.8008281904610115
+        ResultField: ResultField
+      properties:
+        DocIDField:
+          description: The document ID.
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - DocIDField
+      - ResultField
+      title: Initiate Flow No Email Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 0
+            ResultField: string
+    InitiateFlow_No_Initial_EmailRequest:
+      description: '#### The request sent to initiate a workflow skiiping the first
+        email.'
+      properties:
+        DocIDField:
+          description: The document ID.
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - TokenField
+      title: Initiate Flow No Initial Email Request
+      type: object
+      x-examples: {}
+    InitiateFlow_No_Initial_EmailResponse:
+      description: '#### The response from requesting a workflow skipping the first
+        email.'
+      example:
+        DocIDField: 0.8008281904610115
+        ResultField: ResultField
+      properties:
+        DocIDField:
+          description: The document ID.
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - DocIDField
+      - ResultField
+      title: Initiate Flow No Initial Email Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: 0
+            ResultField: string
+    LinkToPortfolioRequest:
+      description: '#### This request is used to get the url link to a portfolio.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+        DocumentNameField: DocumentNameField
+        PortfolioIDField: PortfolioIDField
+      properties:
+        DocIDField:
+          description: The document ID.
+          minLength: 1
+          type: string
+        DocumentNameField:
+          description: Document name.
+          minLength: 1
+          type: string
+        PortfolioIDField:
+          description: The portfolio ID.
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - DocumentNameField
+      - PortfolioIDField
+      - TokenField
+      title: Link To Portfolio Request
+      type: object
+      x-examples: {}
+    LinkToPortfolioResponse:
+      description: '#### This is the response returned after requesting a url link
+        to a portfolio.'
+      example:
+        ResultField: ResultField
+        PortfolioIDField: PortfolioIDField
+      properties:
+        PortfolioIDField:
+          description: The portfolio ID.
+          minLength: 1
+          type: string
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - PortfolioIDField
+      - ResultField
+      title: Link To Portfolio Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            PortfolioIDField: string
+            ResultField: string
+    LogoutRequest:
+      description: '#### The request sent when a user logs out.'
+      example:
+        TokenField: TokenField
+      properties:
+        TokenField:
+          minLength: 1
+          type: string
+      required:
+      - TokenField
+      title: Logout Request
+      type: object
+      x-examples: {}
+    LogoutResponse:
+      description: '#### The response returned when a user logs out.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - ResultField
+      - TokenField
+      title: Logout Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    MultipleSignersSigningCeremonyRequest:
+      description: '#### This is the request sent when there are multiple signers
+        on a document.'
+      example:
+        LoginPasswordField: "12345"
+        LoginUserNameField: John@gmail.com
+        DocField: DocField
+        DocNameField: DocNameField
+        SignerListField:
+        - SignatureWField: 5.962133916683182
+          SignerReasonField: SignerReasonField
+          SignatureImageIncludeSignedDateField: true
+          SignaturePageField: 1.4658129805029452
+          SignerIndentificationNumberField: SignerIndentificationNumberField
+          SignerLocationField: SignerLocationField
+          SignerTrustReferenceField: SignerTrustReferenceField
+          SignatureHField: 0.8008281904610115
+          SignatureImageIncludeBorderField: true
+          SignatureImageIncludeSignedByField: true
+          SignerEmailField: SignerEmailField
+          SignerTrustOriginField: SignerTrustOriginField
+          SignatureImageIncludeReasonField: true
+          SignatureXField: 5.637376656633329
+          SignatureImageField: SignatureImageField
+          SignatureImageTypeField: 6.027456183070403
+          SignerFullNameField: SignerFullNameField
+          SignatureYField: 2.3021358869347655
+          SignerMobileNumberField: SignerMobileNumberField
+        - SignatureWField: 5.962133916683182
+          SignerReasonField: SignerReasonField
+          SignatureImageIncludeSignedDateField: true
+          SignaturePageField: 1.4658129805029452
+          SignerIndentificationNumberField: SignerIndentificationNumberField
+          SignerLocationField: SignerLocationField
+          SignerTrustReferenceField: SignerTrustReferenceField
+          SignatureHField: 0.8008281904610115
+          SignatureImageIncludeBorderField: true
+          SignatureImageIncludeSignedByField: true
+          SignerEmailField: SignerEmailField
+          SignerTrustOriginField: SignerTrustOriginField
+          SignatureImageIncludeReasonField: true
+          SignatureXField: 5.637376656633329
+          SignatureImageField: SignatureImageField
+          SignatureImageTypeField: 6.027456183070403
+          SignerFullNameField: SignerFullNameField
+          SignatureYField: 2.3021358869347655
+          SignerMobileNumberField: SignerMobileNumberField
+      properties:
+        DocField:
+          minLength: 1
+          type: string
+        DocNameField:
+          minLength: 1
+          type: string
+        LoginPasswordField:
+          description: User's password.
+          example: "12345"
+          format: password
+          minLength: 1
+          type: string
+        LoginUserNameField:
+          description: User's username.
+          example: John@gmail.com
+          minLength: 1
+          type: string
+        SignerListField:
+          items:
+            $ref: '#/components/schemas/MultipleSignersSigningCeremonyRequest_SignerListField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - DocField
+      - DocNameField
+      - LoginPasswordField
+      - LoginUserNameField
+      - SignerListField
+      title: Multiple Signers Signing Ceremony Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocField: string
+            DocNameField: string
+            LoginPasswordField: "12345"
+            LoginUserNameField: John@gmail.com
+            SignerListField:
+            - SignatureHField: 0
+              SignatureImageField: string
+              SignatureImageIncludeBorderField: true
+              SignatureImageIncludeReasonField: true
+              SignatureImageIncludeSignedByField: true
+              SignatureImageIncludeSignedDateField: true
+              SignatureImageTypeField: 0
+              SignaturePageField: 0
+              SignatureWField: 0
+              SignatureXField: 0
+              SignatureYField: 0
+              SignerEmailField: string
+              SignerFullNameField: string
+              SignerIndentificationNumberField: string
+              SignerLocationField: string
+              SignerMobileNumberField: string
+              SignerReasonField: string
+              SignerTrustOriginField: string
+              SignerTrustReferenceField: string
+    MultipleSignersSigningCeremonyResponse:
+      description: '#### This is the response returned when there are multiple people
+        who need to sign a document.'
+      example:
+        CeremonyIDField: 0.8008281904610115
+        SignedDocumentField: SignedDocumentField
+        ResultField: ResultField
+      properties:
+        CeremonyIDField:
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        SignedDocumentField:
+          minLength: 1
+          type: string
+      required:
+      - CeremonyIDField
+      - ResultField
+      - SignedDocumentField
+      title: Multiple Signers Signing Ceremony Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            CeremonyIDField: 0
+            ResultField: string
+            SignedDocumentField: string
+    SetDocumentOrderRequest:
+      description: '#### The request sent when the document order for signing is confirmed.'
+      example:
+        DocumentOrderField: DocumentOrderField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+      properties:
+        DocIDField:
+          minLength: 1
+          type: string
+        DocumentOrderField:
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - DocumentOrderField
+      - TokenField
+      title: Set Document Order Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            DocIDField: string
+            DocumentOrderField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    SetDocumentOrderResponse:
+      description: '#### The response returned when the document order for signing
+        is set.'
+      example:
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - ResultField
+      title: Set Document Order Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+    SharePortfolioRequest:
+      description: '#### The request sent when a user wants to share a portfolio with
+        someone.'
+      example:
+        AccessLevelField: 0.8008281904610115
+        UniqueIDField: UniqueIDField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        ShareOptionField: 6.027456183070403
+        PortfolioIDField: PortfolioIDField
+      properties:
+        AccessLevelField:
+          type: number
+        PortfolioIDField:
+          minLength: 1
+          type: string
+        ShareOptionField:
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+        UniqueIDField:
+          minLength: 1
+          type: string
+      required:
+      - AccessLevelField
+      - PortfolioIDField
+      - ShareOptionField
+      - TokenField
+      - UniqueIDField
+      title: Share Portfolio Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            AccessLevelField: 0
+            PortfolioIDField: string
+            ShareOptionField: 0
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+            UniqueIDField: string
+    SharePortfolioResponse:
+      description: '#### The response returned when a user wants to share a portfolio.'
+      example:
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - ResultField
+      title: Share Portfolio Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+    SharePortfolio_No_EmailRequest:
+      description: '#### The request sent when a user wants to share a portfolio but
+        does not want an email to be sent.'
+      properties:
+        AccessLevelField:
+          type: number
+        PortfolioIDField:
+          minLength: 1
+          type: string
+        ShareOptionField:
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+        UniqueIDField:
+          minLength: 1
+          type: string
+      required:
+      - AccessLevelField
+      - PortfolioIDField
+      - ShareOptionField
+      - TokenField
+      - UniqueIDField
+      title: Share Portfolio No Email Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            AccessLevelField: 0
+            PortfolioIDField: string
+            ShareOptionField: 0
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+            UniqueIDField: string
+    SharePortfolio_No_EmailResponse:
+      description: '#### The response returned when a user wants to share a portfolio
+        without sending out an email.'
+      example:
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - ResultField
+      title: Share Portfolio No Email Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+    SigningCeremonyV2Request:
+      description: '#### The request sent to start the signing process of a document.'
+      example:
+        LoginPasswordField: LoginPasswordField
+        SignatureWField: 5.962133916683182
+        SignerReasonField: SignerReasonField
+        SignatureImageIncludeSignedDateField: true
+        TextFieldsListField:
+        - '{}'
+        - '{}'
+        SignerLocationField: SignerLocationField
+        SignerTrustReferenceField: SignerTrustReferenceField
+        SignatureHField: 0.8008281904610115
+        InitialFieldsListField:
+        - '{}'
+        - '{}'
+        SignatureImageIncludeSignedByField: true
+        SignatureImageIncludeReasonField: true
+        SignatureImageTypeField: 6.027456183070403
+        SignatureYField: 2.3021358869347655
+        LoginUserNameField: LoginUserNameField
+        DocField: DocField
+        SignerMobileNumberField: SignerMobileNumberField
+        SignaturePageField: 1.4658129805029452
+        SignerIdentificationNumberField: SignerIdentificationNumberField
+        SignatureImageIncludeBorderField: true
+        SignerEmailField: SignerEmailField
+        DocNameField: DocNameField
+        SignerTrustOriginField: SignerTrustOriginField
+        SignatureXField: 5.637376656633329
+        SignatureImageField: SignatureImageField
+        SignerFullNameField: SignerFullNameField
+        CheckboxFieldsListField:
+        - '{}'
+        - '{}'
+      properties:
+        CheckboxFieldsListField:
+          items:
+            properties:
+              CheckboxHField:
+                type: number
+              CheckboxPageField:
+                type: number
+              CheckboxWField:
+                type: number
+              CheckboxXField:
+                type: number
+              CheckboxYField:
+                type: number
+              IsCheckedField:
+                type: boolean
+            required:
+            - CheckboxHField
+            - CheckboxPageField
+            - CheckboxWField
+            - CheckboxXField
+            - CheckboxYField
+            - IsCheckedField
+          minItems: 1
+          type: array
+          uniqueItems: true
+        DocField:
+          minLength: 1
+          type: string
+        DocNameField:
+          minLength: 1
+          type: string
+        InitialFieldsListField:
+          items:
+            properties:
+              InitialHField:
+                type: number
+              InitialImageField:
+                minLength: 1
+                type: string
+              InitialImageTypeField:
+                type: number
+              InitialPageField:
+                type: number
+              InitialWField:
+                type: number
+              InitialXField:
+                type: number
+              InitialYField:
+                type: number
+            required:
+            - InitialHField
+            - InitialImageField
+            - InitialImageTypeField
+            - InitialPageField
+            - InitialWField
+            - InitialXField
+            - InitialYField
+          minItems: 1
+          type: array
+          uniqueItems: true
+        LoginPasswordField:
+          minLength: 1
+          type: string
+        LoginUserNameField:
+          minLength: 1
+          type: string
+        SignatureHField:
+          type: number
+        SignatureImageField:
+          minLength: 1
+          type: string
+        SignatureImageIncludeBorderField:
+          type: boolean
+        SignatureImageIncludeReasonField:
+          type: boolean
+        SignatureImageIncludeSignedByField:
+          type: boolean
+        SignatureImageIncludeSignedDateField:
+          type: boolean
+        SignatureImageTypeField:
+          type: number
+        SignaturePageField:
+          type: number
+        SignatureWField:
+          type: number
+        SignatureXField:
+          type: number
+        SignatureYField:
+          type: number
+        SignerEmailField:
+          minLength: 1
+          type: string
+        SignerFullNameField:
+          minLength: 1
+          type: string
+        SignerIdentificationNumberField:
+          minLength: 1
+          type: string
+        SignerLocationField:
+          minLength: 1
+          type: string
+        SignerMobileNumberField:
+          minLength: 1
+          type: string
+        SignerReasonField:
+          minLength: 1
+          type: string
+        SignerTrustOriginField:
+          minLength: 1
+          type: string
+        SignerTrustReferenceField:
+          minLength: 1
+          type: string
+        TextFieldsListField:
+          items:
+            properties:
+              TextFieldHField:
+                type: number
+              TextFieldPageField:
+                type: number
+              TextFieldValueField:
+                minLength: 1
+                type: string
+              TextFieldWField:
+                type: number
+              TextFieldXField:
+                type: number
+              TextFieldYField:
+                type: number
+            required:
+            - TextFieldHField
+            - TextFieldPageField
+            - TextFieldValueField
+            - TextFieldWField
+            - TextFieldXField
+            - TextFieldYField
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - CheckboxFieldsListField
+      - DocField
+      - DocNameField
+      - InitialFieldsListField
+      - LoginPasswordField
+      - LoginUserNameField
+      - SignatureHField
+      - SignatureImageField
+      - SignatureImageIncludeBorderField
+      - SignatureImageIncludeReasonField
+      - SignatureImageIncludeSignedByField
+      - SignatureImageIncludeSignedDateField
+      - SignatureImageTypeField
+      - SignaturePageField
+      - SignatureWField
+      - SignatureXField
+      - SignatureYField
+      - SignerEmailField
+      - SignerFullNameField
+      - SignerIdentificationNumberField
+      - SignerLocationField
+      - SignerMobileNumberField
+      - SignerReasonField
+      - SignerTrustOriginField
+      - SignerTrustReferenceField
+      - TextFieldsListField
+      title: Signing Ceremony V2 Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            CheckboxFieldsListField:
+            - CheckboxHField: 0
+              CheckboxPageField: 0
+              CheckboxWField: 0
+              CheckboxXField: 0
+              CheckboxYField: 0
+              IsCheckedField: true
+            DocField: string
+            DocNameField: string
+            InitialFieldsListField:
+            - InitialHField: 0
+              InitialImageField: string
+              InitialImageTypeField: 0
+              InitialPageField: 0
+              InitialWField: 0
+              InitialXField: 0
+              InitialYField: 0
+            LoginPasswordField: string
+            LoginUserNameField: string
+            SignatureHField: 0
+            SignatureImageField: string
+            SignatureImageIncludeBorderField: true
+            SignatureImageIncludeReasonField: true
+            SignatureImageIncludeSignedByField: true
+            SignatureImageIncludeSignedDateField: true
+            SignatureImageTypeField: 0
+            SignaturePageField: 0
+            SignatureWField: 0
+            SignatureXField: 0
+            SignatureYField: 0
+            SignerEmailField: string
+            SignerFullNameField: string
+            SignerIdentificationNumberField: string
+            SignerLocationField: string
+            SignerMobileNumberField: string
+            SignerReasonField: string
+            SignerTrustOriginField: string
+            SignerTrustReferenceField: string
+            TextFieldsListField:
+            - TextFieldHField: 0
+              TextFieldPageField: 0
+              TextFieldValueField: string
+              TextFieldWField: 0
+              TextFieldXField: 0
+              TextFieldYField: 0
+    SigningCeremonyV2Response:
+      description: '#### The response returned when the signing process is requested.'
+      example:
+        CeremonyIDField: 0.8008281904610115
+        SignedDocumentField: SignedDocumentField
+        ResultField: ResultField
+      properties:
+        CeremonyIDField:
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        SignedDocumentField:
+          minLength: 1
+          type: string
+      required:
+      - CeremonyIDField
+      - ResultField
+      - SignedDocumentField
+      title: Signing Ceremony V2 Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            CeremonyIDField: 0
+            ResultField: string
+            SignedDocumentField: string
+    TokenExtendRequest:
+      description: '#### The request sent to extend the session time by extending
+        the period when the token is valid.'
+      example:
+        TokenValidityField: 0.8008281904610115
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+      properties:
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+        TokenValidityField:
+          type: number
+      required:
+      - TokenField
+      - TokenValidityField
+      title: Token Extend Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+            TokenValidityField: 0
+    TokenExtendResponse:
+      description: '#### The response returned when requesting the extention of the
+        period of which the toekn is valid.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - ResultField
+      - TokenField
+      title: Token Extend Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    TokenValidateRequest:
+      description: '#### This request gets sent when a session token needs to be validated.'
+      example:
+        "0": "0"
+      properties:
+        "0":
+          minLength: 1
+          type: string
+      required:
+      - "0"
+      title: Token Validate Request
+      type: object
+      x-examples:
+        Example:
+          value:
+            "0": string
+    TokenValidateResponse:
+      description: '#### This is the response returned when a session token is validated.'
+      example:
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - ResultField
+      - TokenField
+      title: Token Validate Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+            TokenField:
+              TokenExpiryField: 2019-08-24T14:15:22Z
+              TokenField: aaa111
+    WorkflowSignRequest:
+      description: '#### This request is sent when a document workflow needs to be
+        signed.'
+      example:
+        LoginPasswordField: LoginPasswordField
+        SignReasonField: SignReasonField
+        LatitudeField: LatitudeField
+        TokenField:
+          TokenField: aaa111
+          TokenExpiryField: 2000-01-23T04:56:07.000+00:00
+        DocIDField: DocIDField
+        LongitudeField: LongitudeField
+        LoginUserNameField: email@domain.com
+        TimeZoneOffsetField: 0.8008281904610115
+      properties:
+        DocIDField:
+          minLength: 1
+          type: string
+        LatitudeField:
+          minLength: 1
+          type: string
+        LoginPasswordField:
+          format: password
+          minLength: 1
+          type: string
+        LoginUserNameField:
+          example: email@domain.com
+          minLength: 1
+          type: string
+        LongitudeField:
+          minLength: 1
+          type: string
+        SignReasonField:
+          minLength: 1
+          type: string
+        TimeZoneOffsetField:
+          type: number
+        TokenField:
+          $ref: '#/components/schemas/TokenField'
+      required:
+      - DocIDField
+      - LatitudeField
+      - LoginPasswordField
+      - LoginUserNameField
+      - LongitudeField
+      - SignReasonField
+      - TimeZoneOffsetField
+      - TokenField
+      title: Workflow Sign Request
+      type: object
+      x-examples: {}
+    WorkflowSignResponse:
+      description: '#### This is the response returned when a user gets a request
+        to sign a document workflow.'
+      example:
+        ResultField: ResultField
+      properties:
+        ResultField:
+          description: Displays the result of the call.
+          minLength: 1
+          type: string
+      required:
+      - ResultField
+      title: Workflow Sign Response
+      type: object
+      x-examples:
+        Example:
+          value:
+            ResultField: string
+    ProxyAllowedField:
+      default: 0
+      description: |-
+        #### Determines whether or not the signer can nominate someone else to sign on their behalf.
+
+        `0 = No
+        1 = Yes`
+      enum:
+      - 0
+      - 1
+      maximum: 1
+      minimum: 0
+      title: ProxyAllowedField
+      type: integer
+      x-enumNames:
+      - "No"
+      - "Yes"
+      x-enum-descriptions:
+      - "No"
+      - "Yes"
+      x-enum-varnames:
+      - "No"
+      - "Yes"
+    FieldType:
+      description: |-
+        #### Document Prepper Field Types
+
+        `
+        0  = Signature
+        1  = NameText
+        2  = DateText
+        3  = EmailAddressText
+        4  = ContactNumberText
+        5  = PlainText
+        6  = PlainTextOptional
+        7  = FaceToface
+        8  = Initial
+        9  = CheckBox
+        10 = F2FInitial
+        11 = AddressText
+        12 = CompanyNameText
+        13 = OptionalCurrencyText
+        14 = MandatoryCurrencyText
+        15 = ReadOnlyText
+        16 = NumericFieldOpt
+        17 = NumericFieldMand
+        18 = EmailInputOptional
+        19 = EmailInput
+        `
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+      - 16
+      - 17
+      - 18
+      - 19
+      maximum: 19
+      minimum: 0
+      title: FieldType
+      type: integer
+      x-enumNames:
+      - Signature
+      - NameText
+      - DateText
+      - EmailAddressText
+      - ContactNumberText
+      - PlainText
+      - PlainTextOptional
+      - FaceToface
+      - Initial
+      - CheckBox
+      - F2FInitial
+      - AddressText
+      - CompanyNameText
+      - OptionalCurrencyText
+      - ReadOnlyText
+      - NumericFieldOpt
+      - NumericFieldMand
+      - EmailInputOptional
+      - EmailInput
+      x-enum-descriptions:
+      - Signature
+      - NameText
+      - DateText
+      - EmailAddressText
+      - ContactNumberText
+      - PlainText
+      - PlainTextOptional
+      - FaceToface
+      - Initial
+      - CheckBox
+      - F2FInitial
+      - AddressText
+      - CompanyNameText
+      - OptionalCurrencyText
+      - ReadOnlyText
+      - NumericFieldOpt
+      - NumericFieldMand
+      - EmailInputOptional
+      - EmailInput
+      x-enum-varnames:
+      - Signature
+      - NameText
+      - DateText
+      - EmailAddressText
+      - ContactNumberText
+      - PlainText
+      - PlainTextOptional
+      - FaceToface
+      - Initial
+      - CheckBox
+      - F2FInitial
+      - AddressText
+      - CompanyNameText
+      - OptionalCurrencyText
+      - ReadOnlyText
+      - NumericFieldOpt
+      - NumericFieldMand
+      - EmailInputOptional
+      - EmailInput
+    AdvancedFieldType:
+      description: |-
+        #### Document Prepper Advanced Field Types
+
+        `
+        0 = DropDown
+        1 = CheckBoxGroup
+        2 = OptionalDropDown
+        3 = RadioGroup
+        4 = DateMand
+        5 = DateOpt
+        6 = DropDownCountry
+        7 = OptionalDropDownCountry
+        8 = DropDownMobilePrefix
+        9 = OptionalDropDownMobilePrefix
+        `
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      maximum: 9
+      minimum: 0
+      title: AdvancedFieldType
+      type: number
+      x-enumNames:
+      - DropDown
+      - CheckBoxGroup
+      - OptionalDropDown
+      - RadioGroup
+      - DateMand
+      - DateOpt
+      - DropDownCountry
+      - OptionalDropDownCountry
+      - DropDownMobilePrefix
+      - OptionalDropDownMobilePrefix
+      x-enum-descriptions:
+      - DropDown
+      - CheckBoxGroup
+      - OptionalDropDown
+      - RadioGroup
+      - DateMand
+      - DateOpt
+      - DropDownCountry
+      - OptionalDropDownCountry
+      - DropDownMobilePrefix
+      - OptionalDropDownMobilePrefix
+      x-enum-varnames:
+      - DropDown
+      - CheckBoxGroup
+      - OptionalDropDown
+      - RadioGroup
+      - DateMand
+      - DateOpt
+      - DropDownCountry
+      - OptionalDropDownCountry
+      - DropDownMobilePrefix
+      - OptionalDropDownMobilePrefix
+    AddWokflowStepV2Response_FlowStepsField:
+      example:
+        EmailField: John@domain.com
+        FlowIDField: 2222222
+      properties:
+        ActionField:
+          $ref: '#/components/schemas/ActionField'
+        EmailField:
+          description: Participant email address field.
+          example: John@domain.com
+          minLength: 1
+          type: string
+        FlowIDField:
+          description: Document Flow ID field.
+          example: 2222222
+          type: number
+      required:
+      - ActionField
+      - EmailField
+      - FlowIDField
+      type: object
+    DocPrepperAddAdvancedFieldsRequest_FieldOptionsListField:
+      example:
+        MinField: 2
+        LinkedValueField: LinkedValueField
+        MaxField: 5
+        ValueField: ValueField
+      properties:
+        LinkedValueField:
+          minLength: 1
+          type: string
+        MaxField:
+          description: Max amount field.
+          example: 5
+          type: number
+        MinField:
+          description: Min amount field
+          example: 2
+          type: number
+        ValueField:
+          minLength: 1
+          type: string
+      required:
+      - LinkedValueField
+      - MaxField
+      - MinField
+      - ValueField
+      type: object
+    DocPrepperAddAdvancedFieldsRequest_FieldInfoListField:
+      example:
+        FontSizeField: 12
+        PageNumberField: 2
+        WidthField: "15"
+        XCoordinateField: "60"
+        FieldOptionsListField:
+        - MinField: 2
+          LinkedValueField: LinkedValueField
+          MaxField: 5
+          ValueField: ValueField
+        - MinField: 2
+          LinkedValueField: LinkedValueField
+          MaxField: 5
+          ValueField: ValueField
+        FlowIDField: 11111
+        SearchableField: true
+        HeightField: "30"
+        LinkToField: LinkToField
+        FontFamilyField: Arial
+        YCoordinateField: "120"
+        NameField: Text Field
+        DocIDField: 2147483647
+        UserEmailField: John@domain.com
+        ValueField: ValueField
+      properties:
+        AdvancedFieldTypeField:
+          $ref: '#/components/schemas/AdvancedFieldType'
+        DocIDField:
+          description: Document ID field.
+          example: 2147483647
+          type: number
+        FieldOptionsListField:
+          items:
+            $ref: '#/components/schemas/DocPrepperAddAdvancedFieldsRequest_FieldOptionsListField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        FlowIDField:
+          description: Document Flow ID field.
+          example: 11111
+          type: number
+        FontFamilyField:
+          description: Font family of the text in the field
+          example: Arial
+          minLength: 1
+          type: string
+        FontSizeField:
+          description: Font size of the text in the field
+          example: 12
+          type: number
+        HeightField:
+          description: Field height
+          example: "30"
+          minLength: 1
+          type: string
+        WidthField:
+          description: Field Width
+          example: "15"
+          minLength: 1
+          type: string
+        LinkToField:
+          minLength: 1
+          type: string
+        NameField:
+          example: Text Field
+          minLength: 1
+          type: string
+        PageNumberField:
+          description: Field page number.
+          example: 2
+          type: number
+        SearchableField:
+          type: boolean
+        UserEmailField:
+          description: User email address.
+          example: John@domain.com
+          minLength: 1
+          type: string
+        ValueField:
+          minLength: 1
+          type: string
+        XCoordinateField:
+          description: X-coordinates of field on the page
+          example: "60"
+          minLength: 1
+          type: string
+        YCoordinateField:
+          description: Y-coordinates of field on the page
+          example: "120"
+          minLength: 1
+          type: string
+      required:
+      - AdvancedFieldTypeField
+      - DocIDField
+      - FlowIDField
+      - FontFamilyField
+      - FontSizeField
+      - HeightField
+      - LinkToField
+      - NameField
+      - PageNumberField
+      - SearchableField
+      - UserEmailField
+      - ValueField
+      - WidthField
+      - XCoordinateField
+      - YCoordinateField
+      type: object
+    DocPrepperAddAdvancedFieldsResponse_AdvancedFieldResponseListField:
+      example:
+        DocFieldIDField: 11111
+        ResultField: success
+      properties:
+        DocFieldIDField:
+          description: Document field ID.
+          example: 11111
+          type: number
+        ResultField:
+          description: Displays the result of the call.
+          example: success
+          minLength: 1
+          type: string
+      required:
+      - DocFieldIDField
+      - ResultField
+      type: object
+    FullWorkflowRequest_PortfolioInformationField:
+      description: Portfolio information.
+      example:
+        CreatePortfolioField: true
+        PortfolioNameField: Portfolio 1
+        LinkToPortfolioField: true
+        PortfolioIDField: 11112
+      properties:
+        CreatePortfolioField:
+          description: Create portfolio.
+          type: boolean
+        LinkToPortfolioField:
+          description: Portfolio link.
+          type: boolean
+        PortfolioIDField:
+          description: Portfolio ID.
+          example: 11112
+          type: number
+        PortfolioNameField:
+          description: Portfolio name.
+          example: Portfolio 1
+          minLength: 1
+          type: string
+      required:
+      - CreatePortfolioField
+      - LinkToPortfolioField
+      - PortfolioIDField
+      - PortfolioNameField
+      type: object
+    FullWorkflowRequest_GroupStepField_GroupMembersField:
+      example:
+        LanguageCodeField: LanguageCodeField
+        UserFullNameField: UserFullNameField
+        UserMobileNumberField: UserMobileNumberField
+        UserEmailField: UserEmailField
+      properties:
+        LanguageCodeField:
+          minLength: 1
+          type: string
+        UserEmailField:
+          minLength: 1
+          type: string
+        UserFullNameField:
+          minLength: 1
+          type: string
+        UserMobileNumberField:
+          minLength: 1
+          type: string
+      required:
+      - LanguageCodeField
+      - UserEmailField
+      - UserFullNameField
+      - UserMobileNumberField
+      type: object
+    FullWorkflowRequest_GroupStepField:
+      description: Steps of the group signers in the workflow.
+      example:
+        GroupNameField: Managers
+        RequiredNumberOfSignaturesField: 3
+        GroupMembersField:
+        - LanguageCodeField: LanguageCodeField
+          UserFullNameField: UserFullNameField
+          UserMobileNumberField: UserMobileNumberField
+          UserEmailField: UserEmailField
+        - LanguageCodeField: LanguageCodeField
+          UserFullNameField: UserFullNameField
+          UserMobileNumberField: UserMobileNumberField
+          UserEmailField: UserEmailField
+      properties:
+        GroupMembersField:
+          description: The list of users in a group in the workflow.
+          items:
+            $ref: '#/components/schemas/FullWorkflowRequest_GroupStepField_GroupMembersField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+        GroupNameField:
+          description: Group name.
+          example: Managers
+          minLength: 1
+          type: string
+        RequiredNumberOfSignaturesField:
+          description: Required number of signatures in the group.
+          example: 3
+          type: number
+      required:
+      - GroupMembersField
+      - GroupNameField
+      - RequiredNumberOfSignaturesField
+      type: object
+    FullWorkflowRequest_WorkflowUserFieldsField:
+      example:
+        FieldTypeField: 7
+        TagNameField: TagNameField
+        FontSizeField: 15
+        PageNumberField: 2
+        WidthField: "25"
+        XCoordinateField: "60"
+        XOffsetField: 15
+        HeightField: "15"
+        FontFamilyField: Arial
+        YCoordinateField: "150"
+        GroupUserNumberField: 5
+        YOffsetField: 20
+        IsInvisibleField: true
+        ValueField: ValueField
+      properties:
+        FieldTypeField:
+          description: Field type.
+          example: 7
+          type: number
+        FontFamilyField:
+          description: The font family of the fields text.
+          example: Arial
+          minLength: 1
+          type: string
+        FontSizeField:
+          description: The font size of the fields text.
+          example: 15
+          type: number
+        GroupUserNumberField:
+          description: The users in the group's user number.
+          example: 5
+          type: number
+        HeightField:
+          description: Field height.
+          example: "15"
+          minLength: 1
+          type: string
+        IsInvisibleField:
+          description: Is the field visible.
+          type: boolean
+        PageNumberField:
+          description: Field page number.
+          example: 2
+          type: number
+        TagNameField:
+          description: Field tag name.
+          minLength: 1
+          type: string
+        ValueField:
+          description: Field value.
+          minLength: 1
+          type: string
+        WidthField:
+          description: Field width.
+          example: "25"
+          minLength: 1
+          type: string
+        XCoordinateField:
+          description: The fields x-coordinates.
+          example: "60"
+          minLength: 1
+          type: string
+        XOffsetField:
+          description: The fields x-coordinates offset.
+          example: 15
+          type: number
+        YCoordinateField:
+          description: The fields y-coordinates.
+          example: "150"
+          minLength: 1
+          type: string
+        YOffsetField:
+          description: The fields y-coordinates offset.
+          example: 20
+          type: number
+      required:
+      - FieldTypeField
+      - FontFamilyField
+      - FontSizeField
+      - GroupUserNumberField
+      - HeightField
+      - IsInvisibleField
+      - PageNumberField
+      - TagNameField
+      - ValueField
+      - WidthField
+      - XCoordinateField
+      - XOffsetField
+      - YCoordinateField
+      - YOffsetField
+      type: object
+    FullWorkflowRequest_WorkflowUsersListField:
+      example:
+        UserFullNameField: John Smith
+        MobileNumberField: 078 222 2222
+        PreloadedFaceToFaceSignersField:
+        - '{}'
+        - '{}'
+        SignerPasswordField: P@ssw0rd
+        LongitudeField: LongitudeField
+        ActionField: 1.4658129805029452
+        EmailAddressField: email@domain.com
+        GroupStepField:
+          GroupNameField: Managers
+          RequiredNumberOfSignaturesField: 3
+          GroupMembersField:
+          - LanguageCodeField: LanguageCodeField
+            UserFullNameField: UserFullNameField
+            UserMobileNumberField: UserMobileNumberField
+            UserEmailField: UserEmailField
+          - LanguageCodeField: LanguageCodeField
+            UserFullNameField: UserFullNameField
+            UserMobileNumberField: UserMobileNumberField
+            UserEmailField: UserEmailField
+        LanguageCodeField: ENG
+        UserFirstNameField: John
+        AllowProxyField: 5.962133916683182
+        AutoSignField: true
+        WorkflowUserFieldsField:
+        - FieldTypeField: 7
+          TagNameField: TagNameField
+          FontSizeField: 15
+          PageNumberField: 2
+          WidthField: "25"
+          XCoordinateField: "60"
+          XOffsetField: 15
+          HeightField: "15"
+          FontFamilyField: Arial
+          YCoordinateField: "150"
+          GroupUserNumberField: 5
+          YOffsetField: 20
+          IsInvisibleField: true
+          ValueField: ValueField
+        - FieldTypeField: 7
+          TagNameField: TagNameField
+          FontSizeField: 15
+          PageNumberField: 2
+          WidthField: "25"
+          XCoordinateField: "60"
+          XOffsetField: 15
+          HeightField: "15"
+          FontFamilyField: Arial
+          YCoordinateField: "150"
+          GroupUserNumberField: 5
+          YOffsetField: 20
+          IsInvisibleField: true
+          ValueField: ValueField
+        SignReasonField: Because yes
+        LatitudeField: LatitudeField
+        UserLastNameField: Smith
+      properties:
+        ActionField:
+          description: Refers to the order of signatures from the users.
+          type: number
+        AllowProxyField:
+          description: Allow proxy confirmation field.
+          type: number
+        AutoSignField:
+          description: |
+            ### Enable auto sign.
+
+            `True = Signature will be applied automaticly
+            False = User will need to login and Sign`
+          type: boolean
+        EmailAddressField:
+          description: Workflow user's email addresses.
+          example: email@domain.com
+          minLength: 1
+          type: string
+        GroupStepField:
+          $ref: '#/components/schemas/FullWorkflowRequest_GroupStepField'
+        LanguageCodeField:
+          description: |
+            #### Sets the display language for the user
+            ##### ISO 2 Digit Code
+
+            `en = English
+            es = Spanish
+            fr = French`
+          example: ENG
+          minLength: 1
+          type: string
+        LatitudeField:
+          description: Location latitude.
+          minLength: 1
+          type: string
+        LongitudeField:
+          description: Location longtitude.
+          minLength: 1
+          type: string
+        MobileNumberField:
+          description: Group user's mobile number.
+          example: 078 222 2222
+          minLength: 1
+          type: string
+        PreloadedFaceToFaceSignersField:
+          description: Preloaded user's who will be using the face to face signature
+            field.
+          items:
+            type: object
+          minItems: 1
+          type: array
+          uniqueItems: true
+        SignReasonField:
+          description: Reason for signature.
+          example: Because yes
+          minLength: 1
+          type: string
+        SignerPasswordField:
+          description: Face to face user's password.
+          example: P@ssw0rd
+          format: password
+          minLength: 1
+          type: string
+        UserFirstNameField:
+          description: Face to face user's first name.
+          example: John
+          minLength: 1
+          type: string
+        UserFullNameField:
+          description: Face to face user's full name.
+          example: John Smith
+          minLength: 1
+          type: string
+        UserLastNameField:
+          description: Face to face user's last name.
+          example: Smith
+          minLength: 1
+          type: string
+        WorkflowUserFieldsField:
+          description: The list of the workflowed documents field.
+          items:
+            $ref: '#/components/schemas/FullWorkflowRequest_WorkflowUserFieldsField'
+          minItems: 1
+          type: array
+          uniqueItems: true
+      required:
+      - ActionField
+      - AllowProxyField
+      - AutoSignField
+      - EmailAddressField
+      - LanguageCodeField
+      - LatitudeField
+      - LongitudeField
+      - MobileNumberField
+      - SignReasonField
+      - SignerPasswordField
+      - UserFirstNameField
+      - UserFullNameField
+      - UserLastNameField
+      type: object
+    GetDocumentTagFieldBoxPositionResponse_DocumentTagFieldsBoxPositionField:
+      example:
+        PageNumberField: 0.8008281904610115
+        YCoordinateField: YCoordinateField
+        WidthField: WidthField
+        XCoordinateField: XCoordinateField
+        HeightField: HeightField
+      properties:
+        HeightField:
+          description: The height of the field.
+          minLength: 1
+          type: string
+        PageNumberField:
+          description: The page number where the field is.
+          type: number
+        WidthField:
+          minLength: 1
+          type: string
+        XCoordinateField:
+          description: The x coordinates of the field.
+          minLength: 1
+          type: string
+        YCoordinateField:
+          description: The y coordinates of the field
+          minLength: 1
+          type: string
+      required:
+      - HeightField
+      - PageNumberField
+      - WidthField
+      - XCoordinateField
+      - YCoordinateField
+      type: object
+    GetDocumentTagFieldPositionResponse_DocumentTagFieldsPositionField:
+      example:
+        PageNumberField: 0.8008281904610115
+        YCoordinateField: YCoordinateField
+        XCoordinateField: XCoordinateField
+      properties:
+        PageNumberField:
+          description: The page number where the field is.
+          type: number
+        XCoordinateField:
+          description: The y coordinates of the field.
+          minLength: 1
+          type: string
+        YCoordinateField:
+          description: The x coordinates of the field.
+          minLength: 1
+          type: string
+      required:
+      - PageNumberField
+      - XCoordinateField
+      - YCoordinateField
+      type: object
+    GetDocumentAuditResponse_ActivityField:
+      example:
+        PageField: PageField
+        UserFullNameField: UserFullNameField
+        EventDateField: EventDateField
+        AdditionalField: AdditionalField
+        LocationField: LocationField
+        EmailField: email@domain.com
+        EventField: EventField
+        DocIDField: DocIDField
+        EventStatusField: EventStatusField
+        OrderDateField: OrderDateField
+        ActionOrderField: ActionOrderField
+      properties:
+        ActionOrderField:
+          minLength: 1
+          type: string
+        AdditionalField:
+          minLength: 1
+          type: string
+        DocIDField:
+          minLength: 1
+          type: string
+        EmailField:
+          description: The user's email.
+          example: email@domain.com
+          format: email
+          minLength: 1
+          type: string
+        EventDateField:
+          minLength: 1
+          type: string
+        EventField:
+          minLength: 1
+          type: string
+        EventStatusField:
+          minLength: 1
+          type: string
+        LocationField:
+          minLength: 1
+          type: string
+        OrderDateField:
+          minLength: 1
+          type: string
+        PageField:
+          minLength: 1
+          type: string
+        UserFullNameField:
+          description: User's full name.
+          minLength: 1
+          type: string
+      required:
+      - ActionOrderField
+      - AdditionalField
+      - DocIDField
+      - EmailField
+      - EventDateField
+      - EventField
+      - EventStatusField
+      - LocationField
+      - OrderDateField
+      - PageField
+      - UserFullNameField
+      type: object
+    GetPrepperTemplateResponse_PrepperTemplateValuesField:
+      example:
+        FieldTypeField: FieldTypeField
+        UserFullNameField: UserFullNameField
+        DocFieldIDField: DocFieldIDField
+        PageNumberField: 1.4658129805029452
+        YCoordinateField: 7.061401241503109
+        WidthField: 5.637376656633329
+        XCoordinateField: 2.3021358869347655
+        DocIDField: 0.8008281904610115
+        UserIDField: 5.962133916683182
+        ColorField: ColorField
+        ValueField: ValueField
+        HeightField: 6.027456183070403
+      properties:
+        ColorField:
+          minLength: 1
+          type: string
+        DocFieldIDField:
+          minLength: 1
+          type: string
+        DocIDField:
+          type: number
+        FieldTypeField:
+          minLength: 1
+          type: string
+        HeightField:
+          description: Field height.
+          type: number
+        PageNumberField:
+          type: number
+        UserFullNameField:
+          description: The user's full name.
+          minLength: 1
+          type: string
+        UserIDField:
+          description: The user's ID.
+          type: number
+        ValueField:
+          minLength: 1
+          type: string
+        WidthField:
+          description: Field width.
+          type: number
+        XCoordinateField:
+          description: The x coordinates of the fields.
+          type: number
+        YCoordinateField:
+          description: The y coordinates of the fields
+          type: number
+      required:
+      - ColorField
+      - DocFieldIDField
+      - DocIDField
+      - FieldTypeField
+      - HeightField
+      - PageNumberField
+      - UserFullNameField
+      - UserIDField
+      - ValueField
+      - WidthField
+      - XCoordinateField
+      - YCoordinateField
+      type: object
+    GetPrepperTemplateListResponse_TemplateInformationValuesField:
+      example:
+        TemplateDescriptionField: TemplateDescriptionField
+        NameField: NameField
+        PrepperTemplateIDField: 0.8008281904610115
+      properties:
+        NameField:
+          minLength: 1
+          type: string
+        PrepperTemplateIDField:
+          type: number
+        TemplateDescriptionField:
+          description: Template description.
+          minLength: 1
+          type: string
+      required:
+      - NameField
+      - PrepperTemplateIDField
+      - TemplateDescriptionField
+      type: object
+    MultipleSignersSigningCeremonyRequest_SignerListField:
+      example:
+        SignatureWField: 5.962133916683182
+        SignerReasonField: SignerReasonField
+        SignatureImageIncludeSignedDateField: true
+        SignaturePageField: 1.4658129805029452
+        SignerIndentificationNumberField: SignerIndentificationNumberField
+        SignerLocationField: SignerLocationField
+        SignerTrustReferenceField: SignerTrustReferenceField
+        SignatureHField: 0.8008281904610115
+        SignatureImageIncludeBorderField: true
+        SignatureImageIncludeSignedByField: true
+        SignerEmailField: SignerEmailField
+        SignerTrustOriginField: SignerTrustOriginField
+        SignatureImageIncludeReasonField: true
+        SignatureXField: 5.637376656633329
+        SignatureImageField: SignatureImageField
+        SignatureImageTypeField: 6.027456183070403
+        SignerFullNameField: SignerFullNameField
+        SignatureYField: 2.3021358869347655
+        SignerMobileNumberField: SignerMobileNumberField
+      properties:
+        SignatureHField:
+          type: number
+        SignatureImageField:
+          minLength: 1
+          type: string
+        SignatureImageIncludeBorderField:
+          type: boolean
+        SignatureImageIncludeReasonField:
+          type: boolean
+        SignatureImageIncludeSignedByField:
+          type: boolean
+        SignatureImageIncludeSignedDateField:
+          type: boolean
+        SignatureImageTypeField:
+          type: number
+        SignaturePageField:
+          type: number
+        SignatureWField:
+          type: number
+        SignatureXField:
+          type: number
+        SignatureYField:
+          type: number
+        SignerEmailField:
+          minLength: 1
+          type: string
+        SignerFullNameField:
+          minLength: 1
+          type: string
+        SignerIndentificationNumberField:
+          minLength: 1
+          type: string
+        SignerLocationField:
+          minLength: 1
+          type: string
+        SignerMobileNumberField:
+          minLength: 1
+          type: string
+        SignerReasonField:
+          minLength: 1
+          type: string
+        SignerTrustOriginField:
+          minLength: 1
+          type: string
+        SignerTrustReferenceField:
+          minLength: 1
+          type: string
+      required:
+      - SignatureHField
+      - SignatureImageField
+      - SignatureImageIncludeBorderField
+      - SignatureImageIncludeReasonField
+      - SignatureImageIncludeSignedByField
+      - SignatureImageIncludeSignedDateField
+      - SignatureImageTypeField
+      - SignaturePageField
+      - SignatureWField
+      - SignatureXField
+      - SignatureYField
+      - SignerEmailField
+      - SignerFullNameField
+      - SignerIndentificationNumberField
+      - SignerLocationField
+      - SignerMobileNumberField
+      - SignerReasonField
+      - SignerTrustOriginField
+      - SignerTrustReferenceField
+      type: object
+  securitySchemes: {}
+
